@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>路況與天氣｜道北旅遊嚮導</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0B1220;
+  --surface: #131d30;
+  --surface2: #1a2640;
+  --border: rgba(255,255,255,0.07);
+  --text: #E8EDF5;
+  --muted: rgba(232,237,245,0.45);
+  --green: #06C755;
+  --ice: #7DD3F7;
+  --warn: #FF8C42;
+  --danger: #E63946;
+  --teal: #2DD4BF;
+  --radius: 16px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans TC', sans-serif;
+  min-height: 100vh;
+  max-width: 430px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+/* Loading */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 16px;
+  color: var(--muted);
+}
+
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Area selector */
+.area-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.area-bar::-webkit-scrollbar { display: none; }
+
+.area-chip {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted);
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.area-chip.active {
+  background: rgba(6,199,85,0.15);
+  border-color: rgba(6,199,85,0.4);
+  color: var(--green);
+}
+
+/* Hero */
+.hero {
+  background: linear-gradient(180deg, #0D1F3C 0%, #0B1220 100%);
+  padding: 20px 20px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(125,211,247,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.location-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:.5; transform:scale(1.4); }
+}
+
+.updated-time { margin-left: auto; }
+
+.temp-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.temp-big {
+  font-size: 68px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -2px;
+  color: #C8E6FF;
+}
+
+.temp-unit { font-size: 26px; color: var(--muted); margin-top: 8px; }
+
+.weather-aside { flex: 1; padding-top: 6px; }
+.weather-emoji-big { font-size: 34px; margin-bottom: 4px; }
+.weather-label-big { font-size: 14px; font-weight: 700; }
+.feels-like { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.snow-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(125,211,247,0.1);
+  border: 1px solid rgba(125,211,247,0.2);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  color: var(--ice);
+}
+
+/* Sections */
+.section { padding: 14px 16px 0; }
+
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* Alerts */
+.alert {
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border: 1px solid transparent;
+}
+
+.alert-danger { background: rgba(230,57,70,0.1); border-color: rgba(230,57,70,0.2); }
+.alert-warn   { background: rgba(255,140,66,0.1); border-color: rgba(255,140,66,0.2); }
+.alert-info   { background: rgba(125,211,247,0.08); border-color: rgba(125,211,247,0.15); }
+.alert-ok     { background: rgba(6,199,85,0.08); border-color: rgba(6,199,85,0.15); }
+
+.alert-icon { font-size: 20px; flex-shrink: 0; }
+.alert-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.alert-danger .alert-title { color: #FF6B7A; }
+.alert-warn   .alert-title { color: var(--warn); }
+.alert-info   .alert-title { color: var(--ice); }
+.alert-ok     .alert-title { color: var(--green); }
+.alert-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* Meters */
+.meter-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.meter-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.meter-lbl { font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+.meter-val { font-size: 20px; font-weight: 900; margin-bottom: 6px; }
+.meter-bar { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.08); overflow: hidden; }
+.meter-fill { height: 100%; border-radius: 2px; }
+.fill-danger { background: linear-gradient(90deg,#E63946,#FF6B7A); }
+.fill-warn   { background: linear-gradient(90deg,#FF8C42,#FFB830); }
+.fill-ok     { background: linear-gradient(90deg,#06C755,#2DD4BF); }
+.meter-note { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+/* Pop probability */
+.pop-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.pop-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 6px;
+  text-align: center;
+}
+
+.pop-time { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+.pop-val { font-size: 14px; font-weight: 700; }
+
+/* Weekly */
+.weekly-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.weekly-scroll::-webkit-scrollbar { display: none; }
+
+.week-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 10px;
+  text-align: center;
+  flex-shrink: 0;
+  min-width: 62px;
+}
+
+.week-card.today {
+  background: rgba(6,199,85,0.1);
+  border-color: rgba(6,199,85,0.3);
+}
+
+.week-day { font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+.week-emoji { font-size: 18px; margin-bottom: 5px; }
+.week-label { font-size: 9px; color: var(--muted); margin-bottom: 5px; }
+.week-temps { font-size: 11px; font-weight: 700; }
+.week-max { color: #FF8C42; }
+.week-min { color: var(--ice); }
+
+/* Error */
+.error-card {
+  margin: 20px 16px;
+  background: rgba(230,57,70,0.1);
+  border: 1px solid rgba(230,57,70,0.2);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+}
+
+.retry-btn {
+  margin-top: 12px;
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pb-safe { padding-bottom: 32px; }
+</style>
+</head>
+<body>
+
+<div id="loading" class="loading-screen">
+  <div class="spinner"></div>
+  <div>正在取得氣象廳最新資料…</div>
+</div>
+
+<div id="app" style="display:none;">
+
+  <!-- 地區選擇 -->
+  <div class="area-bar">
+    <div class="area-chip active" onclick="loadArea('asahikawa', this)">旭川</div>
+    <div class="area-chip" onclick="loadArea('furano', this)">富良野・美瑛</div>
+    <div class="area-chip" onclick="loadArea('nayoro', this)">名寄・士別</div>
+    <div class="area-chip" onclick="loadArea('wakkanai', this)">稚內</div>
+    <div class="area-chip" onclick="loadArea('rumoi', this)">留萌</div>
+  </div>
+
+  <!-- Hero 天氣主畫面 -->
+  <div class="hero">
+    <div class="location-row">
+      <div class="live-dot"></div>
+      <span id="loc-name">旭川・上川</span>
+      <span class="updated-time" id="updated-at"></span>
+    </div>
+    <div class="temp-row">
+      <div class="temp-big" id="temp-max">--</div>
+      <div class="temp-unit">°C</div>
+      <div class="weather-aside">
+        <div class="weather-emoji-big" id="weather-emoji">🌡️</div>
+        <div class="weather-label-big" id="weather-label">載入中</div>
+        <div class="feels-like" id="feels-like"></div>
+      </div>
+    </div>
+    <div class="snow-badge" id="snow-badge" style="display:none;">
+      <span id="snow-text"></span>
+    </div>
+  </div>
+
+  <!-- 警報 -->
+  <div class="section">
+    <div class="section-title">⚠️ 今日警報</div>
+    <div id="alerts-container"></div>
+  </div>
+
+  <!-- 安全指數 -->
+  <div class="section">
+    <div class="section-title">📊 安全指數</div>
+    <div class="meter-grid">
+      <div class="meter-card">
+        <div class="meter-lbl">黑冰危險指數</div>
+        <div class="meter-val" id="ice-val" style="color:#FF6B7A;">--</div>
+        <div class="meter-bar"><div class="meter-fill fill-danger" id="ice-bar" style="width:0%"></div></div>
+        <div class="meter-note" id="ice-note"></div>
+      </div>
+      <div class="meter-card">
+        <div class="meter-lbl">能見度指數</div>
+        <div class="meter-val" id="vis-val" style="color:var(--warn);">--</div>
+        <div class="meter-bar"><div class="meter-fill" id="vis-bar" style="width:0%"></div></div>
+        <div class="meter-note" id="vis-note"></div>
+      </div>
+      <div class="meter-card">
+        <div class="meter-lbl">道路通行率</div>
+        <div class="meter-val" id="road-val" style="color:var(--warn);">--</div>
+        <div class="meter-bar"><div class="meter-fill" id="road-bar" style="width:0%"></div></div>
+        <div class="meter-note" id="road-note"></div>
+      </div>
+      <div class="meter-card">
+        <div class="meter-lbl">自駕建議</div>
+        <div class="meter-val" id="drive-val">--</div>
+        <div class="meter-bar"><div class="meter-fill fill-ok" id="drive-bar" style="width:0%"></div></div>
+        <div class="meter-note" id="drive-note"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 降水機率 -->
+  <div class="section">
+    <div class="section-title">🌧️ 今日降水機率</div>
+    <div class="pop-row" id="pop-container"></div>
+  </div>
+
+  <!-- 週間預報 -->
+  <div class="section">
+    <div class="section-title">📅 週間天氣</div>
+    <div class="weekly-scroll" id="weekly-container"></div>
+  </div>
+
+  <div class="pb-safe"></div>
+</div>
+
+<script>
+// ★★ 部署後請改成你的 Railway 網址 ★★
+const API_BASE = window.location.origin;
+
+const POP_LABELS = ['00-06時', '06-12時', '12-18時', '18-24時'];
+
+async function loadArea(area, chipEl) {
+  // 切換 chip 選中狀態
+  if (chipEl) {
+    document.querySelectorAll('.area-chip').forEach(c => c.classList.remove('active'));
+    chipEl.classList.add('active');
+  }
+
+  // 顯示 loading（不遮住整個畫面，只清空內容）
+  document.getElementById('weather-label').textContent = '取得中…';
+  document.getElementById('temp-max').textContent = '--';
+
+  try {
+    const res = await fetch(`${API_BASE}/api/weather?area=${area}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    renderWeather(data);
+
+  } catch (err) {
+    document.getElementById('alerts-container').innerHTML = `
+      <div class="error-card">
+        <div>⚠️ 無法取得天氣資料</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px;">${err.message}</div>
+        <button class="retry-btn" onclick="loadArea('${area}')">重試</button>
+      </div>`;
+  }
+}
+
+function renderWeather(d) {
+  // 基本資訊
+  document.getElementById('loc-name').textContent = d.location;
+  document.getElementById('updated-at').textContent = d.updatedAt?.split(' ')[1] + ' 更新';
+  document.getElementById('weather-emoji').textContent = d.today.emoji;
+  document.getElementById('weather-label').textContent = d.today.label;
+
+  // 氣溫
+  const tempDisplay = d.today.tempMax !== null ? Math.round(d.today.tempMax) : '--';
+  document.getElementById('temp-max').textContent = tempDisplay;
+
+  // 體感
+  if (d.today.feelsLike !== null) {
+    document.getElementById('feels-like').textContent =
+      `最低 ${d.today.tempMin}°C｜體感 ${Math.round(d.today.feelsLike)}°C`;
+  }
+
+  // 大雪提示
+  const snowBadge = document.getElementById('snow-badge');
+  if (['snow', 'heavy_snow', 'blizzard'].includes(d.today.level)) {
+    document.getElementById('snow-text').textContent =
+      d.today.level === 'blizzard' ? '⛈️ 暴風雪警戒' :
+      d.today.level === 'heavy_snow' ? '❄️ 大雪注意' : '🌨️ 降雪中';
+    snowBadge.style.display = 'inline-flex';
+  } else {
+    snowBadge.style.display = 'none';
+  }
+
+  // 警報
+  const alertsEl = document.getElementById('alerts-container');
+  if (d.alerts?.length > 0) {
+    alertsEl.innerHTML = d.alerts.map(a => `
+      <div class="alert alert-${a.type}">
+        <div class="alert-icon">${a.icon}</div>
+        <div>
+          <div class="alert-title">${a.title}</div>
+          <div class="alert-desc">${a.desc}</div>
+        </div>
+      </div>`).join('');
+  } else {
+    alertsEl.innerHTML = `
+      <div class="alert alert-ok">
+        <div class="alert-icon">✅</div>
+        <div>
+          <div class="alert-title">今日無重大警報</div>
+          <div class="alert-desc">天氣狀況正常，請仍注意路面狀況。</div>
+        </div>
+      </div>`;
+  }
+
+  // 安全指數
+  const s = d.safety;
+
+  const iceColor = s.iceRisk >= 70 ? 'fill-danger' : s.iceRisk >= 40 ? 'fill-warn' : 'fill-ok';
+  document.getElementById('ice-val').textContent = s.iceRisk;
+  document.getElementById('ice-bar').style.width = s.iceRisk + '%';
+  document.getElementById('ice-bar').className = `meter-fill ${iceColor}`;
+  document.getElementById('ice-note').textContent = s.iceRisk >= 70 ? '極高風險' : s.iceRisk >= 40 ? '中等風險' : '低風險';
+
+  const visColor = s.visibility >= 70 ? 'fill-ok' : s.visibility >= 40 ? 'fill-warn' : 'fill-danger';
+  document.getElementById('vis-val').textContent = s.visibility;
+  document.getElementById('vis-bar').style.width = s.visibility + '%';
+  document.getElementById('vis-bar').className = `meter-fill ${visColor}`;
+  document.getElementById('vis-note').textContent = s.visibility >= 70 ? '能見度良好' : s.visibility >= 40 ? '能見度偏低' : '能見度極差';
+
+  const roadColor = s.roadOpen >= 80 ? 'fill-ok' : s.roadOpen >= 50 ? 'fill-warn' : 'fill-danger';
+  document.getElementById('road-val').textContent = s.roadOpen + '%';
+  document.getElementById('road-bar').style.width = s.roadOpen + '%';
+  document.getElementById('road-bar').className = `meter-fill ${roadColor}`;
+  document.getElementById('road-note').textContent = s.roadOpen >= 80 ? '大部分道路暢通' : s.roadOpen >= 50 ? '部分路線受限' : '多條道路封閉';
+
+  const driveColor = s.driveScore >= 70 ? 'fill-ok' : s.driveScore >= 40 ? 'fill-warn' : 'fill-danger';
+  document.getElementById('drive-val').textContent = s.driveScore >= 80 ? '✅' : s.driveScore >= 50 ? '⚠️' : '⛔';
+  document.getElementById('drive-bar').style.width = s.driveScore + '%';
+  document.getElementById('drive-bar').className = `meter-fill ${driveColor}`;
+  document.getElementById('drive-note').textContent = s.driveLabel;
+
+  // 降水機率
+  const popEl = document.getElementById('pop-container');
+  if (d.today.pop?.length > 0) {
+    popEl.innerHTML = d.today.pop.map((p, i) => `
+      <div class="pop-card">
+        <div class="pop-time">${POP_LABELS[i] || ''}</div>
+        <div class="pop-val" style="color:${parseInt(p) >= 50 ? 'var(--ice)' : 'var(--text)'};">${p}</div>
+      </div>`).join('');
+  } else {
+    popEl.innerHTML = '<div style="color:var(--muted);font-size:12px;">資料更新中</div>';
+  }
+
+  // 週間天氣
+  const weekEl = document.getElementById('weekly-container');
+  if (d.weekly?.length > 0) {
+    weekEl.innerHTML = d.weekly.map((w, i) => `
+      <div class="week-card ${i === 0 ? 'today' : ''}">
+        <div class="week-day">${w.label}</div>
+        <div class="week-emoji">${w.emoji}</div>
+        <div class="week-label">${w.weather}</div>
+        <div class="week-temps">
+          <span class="week-max">${w.tempMax}°</span>
+          <span style="color:var(--muted);"> / </span>
+          <span class="week-min">${w.tempMin}°</span>
+        </div>
+      </div>`).join('');
+  }
+}
+
+// 初始載入
+window.addEventListener('DOMContentLoaded', async () => {
+  await loadArea('asahikawa', null);
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+});
+</script>
+</body>
+</html>
