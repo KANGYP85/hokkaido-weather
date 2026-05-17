@@ -23,10 +23,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 道北各地區代碼對照表
 // ================================================
 const AREA_CODES = {
-  asahikawa: { code: '016000', name: '旭川・上川' },
-  furano:    { code: '016000', name: '富良野・美瑛' },
-  wakkanai:  { code: '017000', name: '稚內・宗谷' },
-  nayoro:    { code: '017000', name: '名寄・士別' },
+  asahikawa: { code: '012000', name: '旭川・上川' },
+  furano:    { code: '012000', name: '富良野・美瑛' },
+  wakkanai:  { code: '011000', name: '稚內・宗谷' },
+  nayoro:    { code: '012000', name: '名寄・士別' },
   rumoi:     { code: '012000', name: '留萌・增毛' },
 };
 
