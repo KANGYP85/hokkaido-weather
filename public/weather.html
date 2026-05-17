@@ -48,13 +48,13 @@ body {
 }
 
 .header-title {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 900;
   color: white;
 }
 
 .header-sub {
-  font-size: 11px;
+  font-size: 17px;
   color: rgba(255,255,255,0.55);
 }
 
@@ -66,7 +66,7 @@ body {
   border: 1px solid rgba(255,255,255,0.25);
   border-radius: 20px;
   padding: 4px 10px;
-  font-size: 10px;
+  font-size: 16px;
   font-weight: 700;
   color: #A8F0C8;
 }
@@ -95,7 +95,7 @@ body {
   padding: 12px 6px 10px;
   text-align: center;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--muted);
   border-bottom: 2px solid transparent;
@@ -117,7 +117,7 @@ body {
   padding: 60px 20px;
   gap: 12px;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 17px;
 }
 
 .spinner {
@@ -169,7 +169,7 @@ body {
   gap: 6px;
 }
 
-.weather-label { font-size: 13px; color: var(--muted); }
+.weather-label { font-size: 17px; color: var(--muted); }
 
 .temp-display { text-align: right; }
 
@@ -181,8 +181,8 @@ body {
   letter-spacing: -1px;
 }
 
-.temp-unit { font-size: 20px; color: rgba(255,255,255,0.6); }
-.feels-like { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 4px; }
+.temp-unit { font-size: 22px; color: rgba(255,255,255,0.6); }
+.feels-like { font-size: 16px; color: rgba(255,255,255,0.55); margin-top: 4px; }
 
 /* Stats row */
 .stats-row {
@@ -199,9 +199,9 @@ body {
 
 .stat-item:last-child { border-right: none; }
 
-.stat-icon { font-size: 14px; margin-bottom: 3px; }
-.stat-val { font-size: 12px; font-weight: 700; color: var(--text); }
-.stat-lbl { font-size: 9px; color: var(--muted); margin-top: 1px; }
+.stat-icon { font-size: 16px; margin-bottom: 3px; }
+.stat-val { font-size: 16px; font-weight: 700; color: var(--text); }
+.stat-lbl { font-size: 13px; color: var(--muted); margin-top: 1px; }
 
 /* Summary banner */
 .summary-banner {
@@ -218,8 +218,8 @@ body {
 .banner-warn   { background: #FFF4EA; border-color: #FCCF99; }
 .banner-danger { background: #FEF0F0; border-color: #FBBBBB; }
 
-.banner-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-.banner-text { font-size: 13px; line-height: 1.6; }
+.banner-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+.banner-text { font-size: 17px; line-height: 1.6; }
 .banner-ok .banner-text     { color: #1A7A46; }
 .banner-warn .banner-text   { color: #9A5010; }
 .banner-danger .banner-text { color: #9A2020; }
@@ -228,7 +228,7 @@ body {
 .tips-section { margin: 12px 16px 0; }
 
 .tips-title {
-  font-size: 11px;
+  font-size: 17px;
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--muted);
@@ -245,7 +245,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 10px;
   margin-bottom: 6px;
-  font-size: 12px;
+  font-size: 16px;
   color: var(--text);
   line-height: 1.5;
 }
@@ -272,7 +272,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 5px 12px;
-  font-size: 11px;
+  font-size: 17px;
   color: var(--muted);
 }
 
@@ -290,7 +290,7 @@ body {
 
 .spot-type {
   margin-left: 5px;
-  font-size: 9px;
+  font-size: 17px;
   opacity: 0.6;
   font-weight: 400;
 }
@@ -327,7 +327,7 @@ body {
   transition: height 0.5s ease;
 }
 
-.trend-hour { font-size: 9px; color: var(--muted); }
+.trend-hour { font-size: 13px; color: var(--muted); }
 
 /* JMA alerts */
 .alerts-section { margin: 12px 16px 0; }
@@ -340,7 +340,7 @@ body {
   gap: 10px;
   align-items: flex-start;
   border: 1px solid transparent;
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .alert-danger { background: #FEF0F0; border-color: #FBBBBB; }
@@ -348,7 +348,7 @@ body {
 .alert-info   { background: #EEF6FD; border-color: #B6D8F5; }
 
 .alert-icon { font-size: 16px; flex-shrink: 0; }
-.alert-label { font-size: 13px; font-weight: 700; }
+.alert-label { font-size: 17px; font-weight: 700; }
 .alert-danger .alert-label { color: #9A2020; }
 .alert-warn   .alert-label { color: #9A5010; }
 .alert-info   .alert-label { color: #1A5A8A; }
@@ -361,11 +361,84 @@ body {
 
 .updated-row {
   text-align: center;
-  font-size: 10px;
+  font-size: 16px;
   color: var(--muted);
   margin-top: 16px;
   padding: 0 16px;
 }
+
+.mode-tab {
+  flex: 1;
+  padding: 10px 6px 8px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.mode-tab.active {
+  color: #E07A20;
+  border-bottom-color: #E07A20;
+  font-weight: 700;
+}
+
+.forecast-day {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fc-date { font-size: 16px; color: var(--muted); width: 100px; flex-shrink: 0; }
+.fc-weather { font-size: 22px; flex-shrink: 0; }
+.fc-label { font-size: 16px; color: var(--muted); flex: 1; }
+.fc-right { text-align: right; }
+.fc-temps { font-size: 17px; font-weight: 700; white-space: nowrap; }
+.fc-max { color: #D03040; }
+.fc-min { color: #3B8FD4; }
+.fc-snow { font-size: 16px; color: #3B8FD4; margin-top: 2px; }
+
+.climate-month {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+
+.cm-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.cm-month { font-size: 17px; font-weight: 700; }
+.cm-note { font-size: 17px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+
+.cm-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.cm-stat {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 6px 4px;
+  text-align: center;
+}
+
+.cm-stat-val { font-size: 16px; font-weight: 700; }
+.cm.stat-lbl { font-size: 13px; color: var(--muted); margin-top: 1px; }
 </style>
 </head>
 <body>
@@ -391,6 +464,13 @@ body {
   <div class="city-tab" onclick="switchCity('furano', this)">富良野</div>
 </div>
 
+<!-- Mode tabs -->
+<div style="display:flex; background:#fff; border-bottom:1px solid var(--border);">
+  <div class="mode-tab active" id="mtab-today" onclick="switchMode('today', this)">今日天氣</div>
+  <div class="mode-tab" id="mtab-forecast" onclick="switchMode('forecast', this)">16天預報</div>
+  <div class="mode-tab" id="mtab-climate" onclick="switchMode('climate', this)">穿著指南</div>
+</div>
+
 <!-- Loading -->
 <div id="loading" class="loading">
   <div class="spinner"></div>
@@ -399,14 +479,211 @@ body {
 
 <!-- City pages -->
 <div id="content" style="display:none;">
-  <div class="city-content active" id="page-asahikawa"></div>
-  <div class="city-content" id="page-biei"></div>
-  <div class="city-content" id="page-furano"></div>
+
+  <!-- 今日天氣 -->
+  <div id="mode-today">
+    <div class="city-content active" id="page-asahikawa"></div>
+    <div class="city-content" id="page-biei"></div>
+    <div class="city-content" id="page-furano"></div>
+  </div>
+
+  <!-- 16天預報 -->
+  <div id="mode-forecast" style="display:none; padding:16px;">
+    <div id="forecast-content"></div>
+  </div>
+
+  <!-- 月份氣候 -->
+  <div id="mode-climate" style="display:none; padding:16px;">
+    <div id="climate-content"></div>
+  </div>
+
 </div>
 
 <script>
 const API_BASE = window.location.origin;
 const cache = {};
+let currentCity = 'asahikawa';
+let currentMode = 'today';
+
+function switchMode(mode, el) {
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentMode = mode;
+
+  document.getElementById('mode-today').style.display = mode === 'today' ? 'block' : 'none';
+  document.getElementById('mode-forecast').style.display = mode === 'forecast' ? 'block' : 'none';
+  document.getElementById('mode-climate').style.display = mode === 'climate' ? 'block' : 'none';
+
+  if (mode === 'forecast') loadForecast(currentCity);
+  if (mode === 'climate') loadClimate(currentCity);
+}
+
+async function loadForecast(cityKey) {
+  const el = document.getElementById('forecast-content');
+  el.innerHTML = `<div class="loading"><div class="spinner"></div><div>取得16天預報中…</div></div>`;
+  try {
+    const r = await fetch(`${API_BASE}/api/forecast?city=${cityKey}`);
+    const data = await r.json();
+    renderForecast(data);
+  } catch {
+    el.innerHTML = `<div style="color:var(--danger); padding:20px; text-align:center;">無法取得預報資料</div>`;
+  }
+}
+
+function renderForecast(data) {
+  const el = document.getElementById('forecast-content');
+  el.innerHTML = `
+    <div style="font-size:15px; color:var(--muted); margin-bottom:12px; font-weight:700; letter-spacing:0.08em;">📅 ${data.city} — 未來 16 天預報</div>
+    ${data.days.map(d => {
+      const snowText = d.snow > 0 ? `❄️ 雪 ${d.snow}mm` : d.rain > 0 ? `🌧️ 雨 ${d.rain}mm` : '';
+      const popText = d.pop > 0 ? `${d.pop}%` : '';
+      const levelColor = d.level === 'heavy_snow' || d.level === 'blizzard' ? '#3B8FD4'
+        : d.level === 'rain' ? '#555' : 'var(--text)';
+      return `<div class="forecast-day">
+        <div class="fc-date">${d.label}</div>
+        <div class="fc-weather">${d.emoji}</div>
+        <div class="fc-label" style="color:${levelColor}">${d.weather}</div>
+        <div class="fc-right">
+          <div class="fc-temps">
+            <span class="fc-max">${d.tempMax}°</span>
+            <span style="color:var(--muted);"> / </span>
+            <span class="fc-min">${d.tempMin}°</span>
+          </div>
+          ${snowText ? `<div class="fc-snow">${snowText}${popText ? ` · ${popText}` : ''}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+async function loadClimate(cityKey) {
+  const el = document.getElementById('climate-content');
+  const today = new Date().toISOString().slice(0, 10);
+  el.innerHTML = `
+    <div style="font-size:15px; color:var(--muted); margin-bottom:12px; font-weight:700; letter-spacing:0.08em;">
+      👕 ${getCityName(cityKey)} — 穿著指南（台灣人體感）
+    </div>
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:16px;">
+      <div style="font-size:15px; font-weight:700; margin-bottom:10px;">查詢特定日期穿著建議</div>
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <input type="date" id="outfit-date" value="${today}" style="flex:1; min-width:140px; font-size:16px;" />
+        <button onclick="queryOutfit('${cityKey}')" style="font-size:15px; padding:6px 16px; background:#E07A20; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:700;">查詢穿著</button>
+      </div>
+      <div style="font-size:15px; color:var(--muted); margin-top:8px;">根據過去5年同期氣候資料推算，未來日期也可以查</div>
+    </div>
+    <div id="outfit-result"></div>
+    <div style="font-size:15px; color:var(--muted); margin-bottom:10px; font-weight:700; letter-spacing:0.08em; margin-top:4px;">📅 各月份快速參考</div>
+    <div id="month-cards"></div>
+  `;
+  renderMonthCards(cityKey);
+}
+
+function renderMonthCards(cityKey) {
+  const el = document.getElementById('month-cards');
+  if (!el) return;
+  const now = new Date().getMonth() + 1;
+  const months = [
+    { m:1,  icon:'❄️', label:'1月', tempMax:-3, tempMin:-12, tag:'極寒' },
+    { m:2,  icon:'🎪', label:'2月', tempMax:-1, tempMin:-11, tag:'嚴寒' },
+    { m:3,  icon:'🌨️', label:'3月', tempMax:4,  tempMin:-5,  tag:'仍冷' },
+    { m:4,  icon:'🌸', label:'4月', tempMax:12, tempMin:1,   tag:'涼' },
+    { m:5,  icon:'🌼', label:'5月', tempMax:18, tempMin:6,   tag:'舒適' },
+    { m:6,  icon:'🌿', label:'6月', tempMax:23, tempMin:11,  tag:'微涼' },
+    { m:7,  icon:'💜', label:'7月', tempMax:27, tempMin:16,  tag:'溫暖' },
+    { m:8,  icon:'🌻', label:'8月', tempMax:28, tempMin:17,  tag:'溫暖' },
+    { m:9,  icon:'🍂', label:'9月', tempMax:22, tempMin:11,  tag:'微涼' },
+    { m:10, icon:'🍁', label:'10月',tempMax:14, tempMin:4,   tag:'涼' },
+    { m:11, icon:'🌨️', label:'11月',tempMax:5,  tempMin:-3,  tag:'冷' },
+    { m:12, icon:'⛄', label:'12月',tempMax:-1, tempMin:-9,  tag:'嚴寒' },
+  ];
+
+  el.innerHTML = months.map(m => {
+    const isNow = m.m === now;
+    const year = new Date().getFullYear();
+    const dateStr = `${year}-${String(m.m).padStart(2,'0')}-15`;
+    return `
+      <div class="climate-month" style="${isNow ? 'border-color:#E07A20; border-width:1.5px;' : ''}"
+           onclick="document.getElementById('outfit-date').value='${dateStr}'; queryOutfit('${cityKey}');"
+           style="cursor:pointer;">
+        <div class="cm-header">
+          <span style="font-size:20px;">${m.icon}</span>
+          <div style="flex:1;">
+            <div class="cm-month" style="${isNow ? 'color:#E07A20;' : ''}">
+              ${m.label}
+              ${isNow ? '<span style="font-size:16px; background:#FFF3E0; color:#E07A20; padding:2px 7px; border-radius:10px; margin-left:6px;">現在</span>' : ''}
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:16px; font-weight:700;">
+              <span style="color:#D03040;">${m.tempMax}°</span>
+              <span style="color:var(--muted);"> / </span>
+              <span style="color:#3B8FD4;">${m.tempMin}°</span>
+            </div>
+            <div style="font-size:16px; color:var(--muted);">點擊查詢穿著</div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function queryOutfit(cityKey) {
+  const dateInput = document.getElementById('outfit-date');
+  const date = dateInput?.value;
+  if (!date) return;
+
+  const el = document.getElementById('outfit-result');
+  el.innerHTML = `<div class="loading"><div class="spinner"></div><div>根據歷史資料計算穿著建議中…</div></div>`;
+
+  try {
+    const r = await fetch(`${API_BASE}/api/outfit?city=${cityKey}&date=${date}`);
+    const data = await r.json();
+    renderOutfit(data);
+  } catch {
+    el.innerHTML = `<div style="color:var(--danger); padding:16px; text-align:center;">無法取得資料，請重試</div>`;
+  }
+}
+
+function renderOutfit(data) {
+  const el = document.getElementById('outfit-result');
+  const o = data.outfit;
+  const dateLabel = new Date(data.date + 'T00:00:00').toLocaleDateString('zh-TW', { year:'numeric', month:'long', day:'numeric' });
+
+  el.innerHTML = `
+    <div style="background:var(--surface); border:1.5px solid #E07A20; border-radius:12px; padding:14px; margin-bottom:16px;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+        <span style="font-size:22px;">${o.icon}</span>
+        <div>
+          <div style="font-size:16px; font-weight:700;">${data.city}・${dateLabel}</div>
+          <div style="font-size:16px; color:var(--muted);">
+            預估氣溫 <span style="color:#D03040; font-weight:700;">${o.avgTempMax}°C</span> /
+            <span style="color:#3B8FD4; font-weight:700;">${o.avgTempMin}°C</span>
+            ${data.isPast ? '（實際歷史資料）' : '（過去5年同期平均）'}
+          </div>
+        </div>
+      </div>
+
+      ${o.warning ? `<div style="background:#FFF3E0; border:1px solid #FFCC80; border-radius:8px; padding:8px 12px; font-size:16px; color:#8B4500; margin-bottom:10px;">${o.warning}</div>` : ''}
+
+      <div style="font-size:15px; font-weight:700; color:var(--muted); margin-bottom:6px; letter-spacing:0.06em;">👕 上身穿搭</div>
+      ${o.layers.map(l => `
+        <div style="display:flex; gap:8px; align-items:flex-start; padding:7px 10px; background:var(--surface2); border-radius:8px; margin-bottom:5px; font-size:15px;">
+          <span style="color:#E07A20; font-weight:700; flex-shrink:0;">▸</span>
+          <span>${l}</span>
+        </div>`).join('')}
+
+      <div style="font-size:15px; font-weight:700; color:var(--muted); margin:10px 0 6px; letter-spacing:0.06em;">👟 其他穿著</div>
+      ${o.items.map(i => `
+        <div style="display:flex; gap:8px; align-items:flex-start; padding:7px 10px; background:var(--surface2); border-radius:8px; margin-bottom:5px; font-size:15px;">
+          <span style="color:#3B8FD4; font-weight:700; flex-shrink:0;">▸</span>
+          <span>${i}</span>
+        </div>`).join('')}
+
+      <div style="background:#F5F5F5; border-radius:8px; padding:8px 12px; font-size:15px; color:var(--muted); margin-top:10px;">
+        💡 ${o.seasonNote}
+      </div>
+    </div>
+  `;
+}
 
 
 
@@ -435,11 +712,14 @@ function getCityName(key) {
 }
 
 function switchCity(cityKey, el) {
+  currentCity = cityKey;
   document.querySelectorAll('.city-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.city-content').forEach(p => p.classList.remove('active'));
   document.getElementById(`page-${cityKey}`).classList.add('active');
   loadCity(cityKey);
+  if (currentMode === 'forecast') loadForecast(cityKey);
+  if (currentMode === 'climate') loadClimate(cityKey);
 }
 
 function renderCity(cityKey, d) {
@@ -462,7 +742,11 @@ function renderCity(cityKey, d) {
     ? d.spots.map(s => {
         const icon = adv.activityOk ? '✓' : '△';
         const cls  = adv.activityOk ? 'ok' : 'warn';
-        return `<div class="spot-chip ${cls}">${icon} ${s.name}<span class="spot-type">${s.type}</span></div>`;
+        const query = encodeURIComponent(`${s.name} ${d.city} 北海道`);
+        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+        return `<a href="${mapsUrl}" target="_blank" rel="noopener" style="text-decoration:none;">
+          <div class="spot-chip ${cls}">${icon} ${s.name}<span class="spot-type">${s.type}</span> <span style="font-size:11px; opacity:0.6;">↗</span></div>
+        </a>`;
       }).join('')
     : '<div class="spot-chip">今日無適合景點推薦</div>';
 
@@ -510,11 +794,11 @@ function renderCity(cityKey, d) {
   const allZero = trendValues.every(t => t.val === 0);
 
   const trendHtml = allZero
-    ? `<div style="width:100%; text-align:center; font-size:12px; color:var(--muted); padding:8px 0;">今後 6 小時無${trendUnit === '%' ? '降雨' : '降雪'}預測</div>`
+    ? `<div style="width:100%; text-align:center; font-size:16px; color:var(--muted); padding:8px 0;">今後 6 小時無${trendUnit === '%' ? '降雨' : '降雪'}預測</div>`
     : trendValues.map(t => {
         const pct = Math.max((t.val / maxVal) * 100, 4);
         return `<div class="trend-bar-wrap">
-          <div style="font-size:9px; color:var(--muted); margin-bottom:2px;">${t.val}${trendUnit}</div>
+          <div style="font-size:15px; color:var(--muted); margin-bottom:2px;">${t.val}${trendUnit}</div>
           <div class="trend-bar" style="height:${pct}%; background:${trendBarColor};"></div>
           <div class="trend-hour">${t.hour}</div>
         </div>`;
@@ -546,7 +830,7 @@ function renderCity(cityKey, d) {
             <span style="font-size:22px;">${w.emoji}</span>
             <span style="font-size:15px; font-weight:500; color:var(--muted);">${w.label}</span>
           </div>
-          <div class="feels-like" style="font-size:12px; color:var(--muted);">體感 ${w.feelsLike}°C</div>
+          <div class="feels-like" style="font-size:16px; color:var(--muted);">體感 ${w.feelsLike}°C</div>
         </div>
         <div class="temp-display">
           <div>
@@ -579,10 +863,13 @@ function renderCity(cityKey, d) {
       </div>
     </div>
 
-    <!-- 今日建議 -->
+    <!-- 今日穿著建議 -->
     <div class="summary-banner ${bannerClass}">
       <div class="banner-icon">${bannerIcon}</div>
-      <div class="banner-text">${adv.summary}</div>
+      <div>
+        <div style="font-size:15px; font-weight:700; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">👕 今日建議穿著（台灣人體感）</div>
+        <div class="banner-text">${adv.summary}</div>
+      </div>
     </div>
 
     <!-- 旅遊提示 -->
