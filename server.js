@@ -163,12 +163,12 @@ app.get('/api/weather', async (req, res) => {
     // 氣溫
     let tempMin = null, tempMax = null;
     if (tempSeries?.areas?.length > 0) {
-      const temps = tempSeries.areas[0];
-      const minTemps = temps.tempsMin?.filter(t => t !== '') || [];
-      const maxTemps = temps.tempsMax?.filter(t => t !== '') || [];
-      tempMin = minTemps.length > 0 ? parseFloat(minTemps[0]) : null;
-      tempMax = maxTemps.length > 0 ? parseFloat(maxTemps[0]) : null;
-    }
+  const temps = tempSeries.areas[0];
+  const minTemps = (temps.tempsMin || temps.temps || []).filter(t => t !== '');
+  const maxTemps = (temps.tempsMax || temps.temps || []).filter(t => t !== '');
+  tempMin = minTemps.length > 0 ? parseFloat(minTemps[0]) : null;
+  tempMax = maxTemps.length > 0 ? parseFloat(maxTemps[0]) : null;
+}
 
     // 降水機率
     let popValues = [];
