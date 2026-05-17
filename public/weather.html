@@ -151,15 +151,16 @@ body {
   gap: 12px;
 }
 
-
-
 .city-info { flex: 1; }
 
 .city-name {
-  font-size: 16px;
+  font-size: 26px;
   font-weight: 900;
   color: white;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .weather-label-row {
@@ -540,18 +541,18 @@ function renderCity(cityKey, d) {
     <div class="main-card">
       <div class="main-card-top">
         <div class="city-info">
-          <div class="city-name">${d.city}</div>
-          <div class="weather-label-row">
-            <span>${w.emoji}</span>
-            <span class="weather-label">${w.label}</span>
+          <div class="city-name">
+            ${d.city}
+            <span style="font-size:22px;">${w.emoji}</span>
+            <span style="font-size:15px; font-weight:500; color:var(--muted);">${w.label}</span>
           </div>
+          <div class="feels-like" style="font-size:12px; color:var(--muted);">體感 ${w.feelsLike}°C</div>
         </div>
         <div class="temp-display">
           <div>
             <span class="temp-big">${w.temp}</span>
             <span class="temp-unit">°C</span>
           </div>
-          <div class="feels-like">體感 ${w.feelsLike}°C</div>
         </div>
       </div>
       <div class="stats-row">
