@@ -465,52 +465,59 @@ function renderCity(cityKey, d) {
       }).join('')
     : '<div class="spot-chip">今日無適合景點推薦</div>';
 
-  // 動態趨勢：根據季節和天氣決定顯示降雪或降雨
+  // 動態趨勢：根據季節和天氣決定顯示降雪或降雨機率
   const month = new Date().getMonth() + 1;
   const isWinter = month >= 11 || month <= 3;
   const hasSnow = d.snowTrend.some(s => s.snow > 0);
-  const showSnow = isWinter && hasSnow;
+  const hasPop = d.popTrend && d.popTrend.some(p => p.pop > 0);
 
-  // 決定顯示哪種趨勢
-  let trendTitle, trendIcon, trendBarColor, trendValues;
+  let trendTitle, trendIcon, trendBarColor, trendValues, trendUnit;
 
-  if (showSnow) {
-    // 冬季且有降雪 → 顯示降雪趨勢
+  if (isWinter && hasSnow) {
+    // 冬季且有降雪 → 顯示降雪量
     trendTitle = '未來 6 小時降雪趨勢';
     trendIcon = '❄️';
     trendBarColor = '#7DD3F7';
-    trendValues = d.snowTrend.map(s => ({ hour: s.hour, val: s.snow, unit: 'mm' }));
-  } else if (d.rainTrend && d.rainTrend.some(r => r.rain > 0)) {
-    // 有降雨 → 顯示降雨趨勢
-    trendTitle = '未來 6 小時降雨趨勢';
+    trendUnit = 'mm';
+    trendValues = d.snowTrend.map(s => ({ hour: s.hour, val: s.snow }));
+  } else if (hasPop) {
+    // 有降雨機率 → 顯示降雨機率
+    trendTitle = '未來 6 小時降雨機率';
     trendIcon = '🌧️';
     trendBarColor = '#60A5FA';
-    trendValues = d.rainTrend.map(r => ({ hour: r.hour, val: r.rain, unit: 'mm' }));
+    trendUnit = '%';
+    trendValues = d.popTrend.map(p => ({ hour: p.hour, val: p.pop }));
   } else if (isWinter) {
-    // 冬季但無降雪 → 顯示降雪趨勢（數值為0也顯示）
+    // 冬季無降雪也無雨 → 顯示降雪趨勢（全零）
     trendTitle = '未來 6 小時降雪趨勢';
     trendIcon = '❄️';
     trendBarColor = '#7DD3F7';
-    trendValues = d.snowTrend.map(s => ({ hour: s.hour, val: s.snow, unit: 'mm' }));
+    trendUnit = 'mm';
+    trendValues = d.snowTrend.map(s => ({ hour: s.hour, val: s.snow }));
   } else {
-    // 夏季無降雨 → 顯示降雨趨勢
-    trendTitle = '未來 6 小時降雨趨勢';
+    // 夏季無雨 → 顯示降雨機率（全零）
+    trendTitle = '未來 6 小時降雨機率';
     trendIcon = '🌧️';
     trendBarColor = '#60A5FA';
-    trendValues = d.rainTrend
-      ? d.rainTrend.map(r => ({ hour: r.hour, val: r.rain, unit: 'mm' }))
-      : d.snowTrend.map(s => ({ hour: s.hour, val: 0, unit: 'mm' }));
+    trendUnit = '%';
+    trendValues = d.popTrend
+      ? d.popTrend.map(p => ({ hour: p.hour, val: p.pop }))
+      : d.snowTrend.map(s => ({ hour: s.hour, val: 0 }));
   }
 
   const maxVal = Math.max(...trendValues.map(t => t.val), 0.1);
-  const trendHtml = trendValues.map(t => {
-    const pct = Math.max((t.val / maxVal) * 100, 4);
-    const label = t.val > 0 ? `${t.val}` : '−';
-    return `<div class="trend-bar-wrap">
-      <div class="trend-bar" style="height:${pct}%; background:${trendBarColor};"></div>
-      <div class="trend-hour">${t.hour}</div>
-    </div>`;
-  }).join('');
+  const allZero = trendValues.every(t => t.val === 0);
+
+  const trendHtml = allZero
+    ? `<div style="width:100%; text-align:center; font-size:12px; color:var(--muted); padding:8px 0;">今後 6 小時無${trendUnit === '%' ? '降雨' : '降雪'}預測</div>`
+    : trendValues.map(t => {
+        const pct = Math.max((t.val / maxVal) * 100, 4);
+        return `<div class="trend-bar-wrap">
+          <div style="font-size:9px; color:var(--muted); margin-bottom:2px;">${t.val}${trendUnit}</div>
+          <div class="trend-bar" style="height:${pct}%; background:${trendBarColor};"></div>
+          <div class="trend-hour">${t.hour}</div>
+        </div>`;
+      }).join('');
 
   // JMA alerts
   let alertsHtml = '';

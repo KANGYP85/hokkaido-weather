@@ -179,7 +179,7 @@ app.get('/api/city', async (req, res) => {
     // Open-Meteo API
     const omUrl = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}` +
       `&current=temperature_2m,apparent_temperature,weathercode,windspeed_10m,precipitation,snowfall,cloudcover,relativehumidity_2m` +
-      `&hourly=temperature_2m,snowfall,precipitation&timezone=Asia%2FTokyo&forecast_days=1`;
+      `&hourly=temperature_2m,snowfall,precipitation,precipitation_probability&timezone=Asia%2FTokyo&forecast_days=1`;
 
     const [omRes, jmaAlerts] = await Promise.all([
       fetch(omUrl),
@@ -217,6 +217,11 @@ app.get('/api/city', async (req, res) => {
       ?.slice(nowHour, nowHour + 6)
       ?.map((r, i) => ({ hour: `${nowHour + i}時`, rain: Math.round(r * 10) / 10 })) || [];
 
+    // 未來 6 小時降雨機率
+    const popTrend = hourly.precipitation_probability
+      ?.slice(nowHour, nowHour + 6)
+      ?.map((p, i) => ({ hour: `${nowHour + i}時`, pop: p })) || [];
+
     const advice = generateAdvice(cityKey, weather);
 
     // 根據天氣從資料庫動態推薦景點
@@ -238,6 +243,7 @@ app.get('/api/city', async (req, res) => {
       advice,
       snowTrend,
       rainTrend,
+      popTrend,
       jmaAlerts,
     });
 
