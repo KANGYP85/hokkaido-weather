@@ -16,16 +16,16 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 景點資料庫
+const { recommendSpots } = require('./spots');
+
 // ================================================
 // 城市資料（Open-Meteo 用經緯度）
 // ================================================
 const CITIES = {
-  asahikawa: { name: '旭川', lat: 43.77,  lon: 142.36, jma: '012000',
-    spots: ['旭山動物園', '永山美食街', '旭川拉麵村'] },
-  biei:      { name: '美瑛', lat: 43.584, lon: 142.464, jma: '012000',
-    spots: ['白金青池', '拼布之路', '道の駅びえい'] },
-  furano:    { name: '富良野', lat: 43.34, lon: 142.38, jma: '012000',
-    spots: ['Farm Tomita', '富良野起司工房', '北海道葡萄酒'] },
+  asahikawa: { name: '旭川', lat: 43.77,  lon: 142.36, jma: '012000' },
+  biei:      { name: '美瑛', lat: 43.584, lon: 142.464, jma: '012000' },
+  furano:    { name: '富良野', lat: 43.34, lon: 142.38, jma: '012000' },
 };
 
 // ================================================
@@ -214,9 +214,20 @@ app.get('/api/city', async (req, res) => {
 
     const advice = generateAdvice(cityKey, weather);
 
+    // 根據天氣從資料庫動態推薦景點
+    const now2 = new Date();
+    const month = now2.getMonth() + 1;
+    const isWinter = month >= 11 || month <= 3;
+
+    const recommendedSpots = recommendSpots(weather.level, {
+      city: cityKey,
+      winter: isWinter,
+      limit: 4,
+    });
+
     res.json({
       city: city.name,
-      spots: city.spots,
+      spots: recommendedSpots,
       updatedAt: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Tokyo' }),
       weather,
       advice,

@@ -287,6 +287,13 @@ body {
   color: var(--warn);
 }
 
+.spot-type {
+  margin-left: 5px;
+  font-size: 9px;
+  opacity: 0.6;
+  font-weight: 400;
+}
+
 /* Snow trend */
 .trend-section { margin: 12px 16px 0; }
 
@@ -455,9 +462,13 @@ function renderCity(cityKey, d) {
     : `<div class="tip-item"><div class="tip-dot"></div><div>今日天氣良好，出遊請仍注意保暖</div></div>`;
 
   // Spots
-  const spotsHtml = d.spots.map(s =>
-    `<div class="spot-chip ${adv.activityOk ? 'ok' : 'warn'}">${adv.activityOk ? '✓' : '△'} ${s}</div>`
-  ).join('');
+  const spotsHtml = d.spots?.length > 0
+    ? d.spots.map(s => {
+        const icon = adv.activityOk ? '✓' : '△';
+        const cls  = adv.activityOk ? 'ok' : 'warn';
+        return `<div class="spot-chip ${cls}">${icon} ${s.name}<span class="spot-type">${s.type}</span></div>`;
+      }).join('')
+    : '<div class="spot-chip">今日無適合景點推薦</div>';
 
   // Snow trend bars
   const maxSnow = Math.max(...d.snowTrend.map(s => s.snow), 0.1);
