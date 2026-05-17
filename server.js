@@ -212,6 +212,11 @@ app.get('/api/city', async (req, res) => {
       ?.slice(nowHour, nowHour + 6)
       ?.map((s, i) => ({ hour: `${nowHour + i}時`, snow: s })) || [];
 
+    // 未來 6 小時降雨趨勢
+    const rainTrend = hourly.precipitation
+      ?.slice(nowHour, nowHour + 6)
+      ?.map((r, i) => ({ hour: `${nowHour + i}時`, rain: Math.round(r * 10) / 10 })) || [];
+
     const advice = generateAdvice(cityKey, weather);
 
     // 根據天氣從資料庫動態推薦景點
@@ -232,6 +237,7 @@ app.get('/api/city', async (req, res) => {
       weather,
       advice,
       snowTrend,
+      rainTrend,
       jmaAlerts,
     });
 
