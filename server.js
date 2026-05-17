@@ -27,8 +27,7 @@ const AREA_CODES = {
   furano:    { code: '016000', name: '富良野・美瑛' },
   wakkanai:  { code: '017000', name: '稚內・宗谷' },
   nayoro:    { code: '017000', name: '名寄・士別' },
-  rumoi:     { code: '016000', name: '留萌・增毛' },
-  sapporo:   { code: '016000', name: '旭川廣域' },
+  rumoi:     { code: '012000', name: '留萌・增毛' },
 };
 
 // ================================================
