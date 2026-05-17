@@ -1,11 +1,9 @@
 {
   "name": "hokkaido-weather-liff",
-  "version": "1.0.0",
-  "description": "道北旅遊天氣 LIFF 後端",
+  "version": "2.0.0",
+  "description": "道北旅遊天氣 LIFF v2",
   "main": "server.js",
-  "engines": {
-    "node": ">=18.0.0"
-  },
+  "engines": { "node": ">=18.0.0" },
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js"
