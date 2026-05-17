@@ -151,7 +151,7 @@ body {
   gap: 12px;
 }
 
-.city-emoji { font-size: 36px; }
+
 
 .city-info { flex: 1; }
 
@@ -407,11 +407,7 @@ body {
 const API_BASE = window.location.origin;
 const cache = {};
 
-const CITY_EMOJI = {
-  asahikawa: '🏙️',
-  biei: '🌄',
-  furano: '🌸',
-};
+
 
 async function loadCity(cityKey) {
   if (cache[cityKey]) {
@@ -448,7 +444,6 @@ function switchCity(cityKey, el) {
 function renderCity(cityKey, d) {
   const w = d.weather;
   const adv = d.advice;
-  const emoji = CITY_EMOJI[cityKey];
 
   // Summary banner
   const bannerClass = !adv.activityOk && !adv.driveOk ? 'banner-danger'
@@ -500,7 +495,6 @@ function renderCity(cityKey, d) {
     <!-- 主天氣卡 -->
     <div class="main-card">
       <div class="main-card-top">
-        <div class="city-emoji">${emoji}</div>
         <div class="city-info">
           <div class="city-name">${d.city}</div>
           <div class="weather-label-row">
