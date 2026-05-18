@@ -380,16 +380,41 @@ function renderCity(k, d) {
     ? `<div class="section-label">在地提示</div><div class="card">${adv.tips.map(t =>
         `<div class="tip-row"><div class="tip-dot"></div><div>${t}</div></div>`).join('')}</div>` : '';
 
-  const spotsHtml = d.spots?.length > 0
-    ? `<div class="section-label">今日推薦景點</div><div class="card">${d.spots.map(s => {
-        const q = encodeURIComponent(`${s.name} ${d.city} 北海道`);
-        return `<a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener" class="spot-row">
-          <div class="spot-left">
-            <div class="spot-dot ${adv.activityOk ? 'dot-ok' : 'dot-warn'}"></div>
-            <div><div class="spot-name">${s.name}</div><div class="spot-type">${s.type}</div></div>
-          </div>
-          <div class="spot-arrow">↗</div></a>`;
-      }).join('')}</div>` : '';
+  // 全部景點存起來，隨機抽4個顯示
+  const allSpots = d.spots || [];
+  const cityKey2 = k;
+
+  function getSpotHtml(spots, activityOk) {
+    const shuffled = [...spots].sort(() => Math.random() - 0.5).slice(0, 4);
+    return shuffled.map(s => {
+      const q = encodeURIComponent(`${s.name} ${d.city} 北海道`);
+      return `<a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener" class="spot-row">
+        <div class="spot-left">
+          <div class="spot-dot ${activityOk ? 'dot-ok' : 'dot-warn'}"></div>
+          <div><div class="spot-name">${s.name}</div><div class="spot-type">${s.type}</div></div>
+        </div>
+        <div class="spot-arrow">↗</div></a>`;
+    }).join('');
+  }
+
+  const spotsHtml = allSpots.length > 0
+    ? `<div style="display:flex;align-items:center;justify-content:space-between;margin:20px 16px 8px;">
+        <div class="section-label" style="margin:0;">今日推薦景點</div>
+        <button onclick="refreshSpots_${k}()" style="
+          background:linear-gradient(135deg,#FF6B00,#FFB830);
+          color:white; border:none; border-radius:20px;
+          padding:6px 14px; font-size:13px; font-weight:600;
+          cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:5px;">
+          🔀 換一批
+        </button>
+      </div>
+      <div class="card" id="spots-list-${k}">${getSpotHtml(allSpots, adv.activityOk)}</div>` : '';
+
+  // 把 refreshSpots 掛到 window
+  window[`refreshSpots_${k}`] = function() {
+    const el = document.getElementById(`spots-list-${k}`);
+    if (el) el.innerHTML = getSpotHtml(allSpots, adv.activityOk);
+  };
 
   const month = new Date().getMonth() + 1;
   const isWinter = month >= 11 || month <= 3;

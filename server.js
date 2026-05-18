@@ -220,7 +220,7 @@ app.get('/api/city', async (req, res) => {
 
     // 未來 6 小時降雪趨勢
     const now = new Date();
-    const nowHour = now.getHours();
+    const nowHour = parseInt(now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo', hour: 'numeric', hour12: false }));
     const snowTrend = hourly.snowfall
       ?.slice(nowHour, nowHour + 6)
       ?.map((s, i) => ({ hour: `${nowHour + i}時`, snow: s })) || [];
@@ -245,7 +245,7 @@ app.get('/api/city', async (req, res) => {
     const recommendedSpots = recommendSpots(weather.level, {
       city: cityKey,
       winter: isWinter,
-      limit: 4,
+      limit: 20,
     });
 
     res.json({
