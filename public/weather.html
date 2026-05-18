@@ -492,20 +492,47 @@ async function loadForecast(k) {
   const el = document.getElementById('forecast-content');
   el.innerHTML = `<div class="loading"><div class="spinner"></div><div>取得預報中…</div></div>`;
   try {
-    const r = await fetch(`${API_BASE}/api/forecast?city=${k}`);
-    const data = await r.json();
-    const rows = data.days.map((d,i) => {
+    // 同時抓預報和即時天氣
+    const [forecastRes, cityRes] = await Promise.all([
+      fetch(`${API_BASE}/api/forecast?city=${k}`),
+      cache[k] ? Promise.resolve({json: () => cache[k]}) : fetch(`${API_BASE}/api/city?city=${k}`)
+    ]);
+    const forecastData = await forecastRes.json();
+    const cityData = cache[k] || await cityRes.json();
+
+    const rows = forecastData.days.map((d, i) => {
+      // 今天（第一筆）用即時資料取代
+      let tempMax = d.tempMax;
+      let tempMin = d.tempMin;
+      let emoji = d.emoji;
+      let weather = d.weather;
+      let isRealtime = false;
+
+      if (i === 0 && cityData.weather) {
+        const w = cityData.weather;
+        tempMax = w.temp;
+        tempMin = w.feelsLike;
+        emoji = w.emoji;
+        weather = w.label;
+        isRealtime = true;
+      }
+
       const snow = d.snow > 0 ? `❄️ ${d.snow}mm` : d.rain > 0 ? `🌧️ ${d.rain}mm` : '';
       return `<div class="fc-row ${i < 2 ? 'top2' : ''}">
         <div class="fc-date ${i < 2 ? 'bold' : ''}">${d.label}</div>
-        <div class="fc-icon">${d.emoji}</div>
-        <div class="fc-label">${d.weather}</div>
+        <div class="fc-icon">${emoji}</div>
+        <div class="fc-label">${weather}${isRealtime ? '<span style="font-size:10px;color:var(--orange);margin-left:4px;">即時</span>' : ''}</div>
         <div>
-          <div class="fc-temps"><span class="fc-max">${d.tempMax}°</span><span style="color:var(--muted);"> / </span><span class="fc-min">${d.tempMin}°</span></div>
+          <div class="fc-temps">
+            <span class="fc-max">${tempMax}°</span>
+            <span style="color:var(--muted);"> / </span>
+            <span class="fc-min">${isRealtime ? '體感' : ''}${tempMin}°</span>
+          </div>
           ${snow ? `<div class="fc-snow-tag">${snow}</div>` : ''}
         </div></div>`;
     }).join('');
-    el.innerHTML = `<div class="section-label">${data.city} — 未來 16 天預報</div><div class="card">${rows}</div>`;
+
+    el.innerHTML = `<div class="section-label">${forecastData.city} — 未來 16 天預報</div><div class="card">${rows}</div>`;
   } catch {
     el.innerHTML = `<div class="loading" style="color:var(--red);">⚠️ 無法取得預報資料</div>`;
   }
