@@ -192,7 +192,7 @@ app.get('/api/city', async (req, res) => {
     // Open-Meteo API
     const omUrl = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}` +
       `&current=temperature_2m,apparent_temperature,weathercode,windspeed_10m,precipitation,snowfall,cloudcover,relativehumidity_2m` +
-      `&hourly=temperature_2m,snowfall,precipitation,precipitation_probability&timezone=Asia%2FTokyo&forecast_days=1`;
+      `&hourly=temperature_2m,snowfall,precipitation,precipitation_probability&timezone=Asia%2FTokyo&forecast_days=2`;
 
     const [omRes, jmaAlerts] = await Promise.all([
       fetch(omUrl),
@@ -218,22 +218,28 @@ app.get('/api/city', async (req, res) => {
       level:      wmo.level,
     };
 
-    // 未來 6 小時降雪趨勢
+    // 未來 6 小時降雪趨勢（跨日處理）
     const now = new Date();
     const nowHour = parseInt(now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo', hour: 'numeric', hour12: false }));
-    const snowTrend = hourly.snowfall
-      ?.slice(nowHour, nowHour + 6)
-      ?.map((s, i) => ({ hour: `${nowHour + i}時`, snow: s })) || [];
 
-    // 未來 6 小時降雨趨勢
-    const rainTrend = hourly.precipitation
-      ?.slice(nowHour, nowHour + 6)
-      ?.map((r, i) => ({ hour: `${nowHour + i}時`, rain: Math.round(r * 10) / 10 })) || [];
+    // Open-Meteo 回傳的 hourly 是當天 0-23 時，需要抓 2 天資料才能跨日
+    const hourlyAll = hourly;
+    function getTrend(arr, transform) {
+      if (!arr) return [];
+      const result = [];
+      for (let i = 0; i < 6; i++) {
+        const idx = nowHour + i;
+        const val = arr[idx] ?? null;
+        if (val === null) break;
+        const displayHour = (nowHour + i) % 24;
+        result.push({ hour: `${displayHour}時`, ...transform(val) });
+      }
+      return result;
+    }
 
-    // 未來 6 小時降雨機率
-    const popTrend = hourly.precipitation_probability
-      ?.slice(nowHour, nowHour + 6)
-      ?.map((p, i) => ({ hour: `${nowHour + i}時`, pop: p })) || [];
+    const snowTrend = getTrend(hourlyAll.snowfall, v => ({ snow: v }));
+    const rainTrend = getTrend(hourlyAll.precipitation, v => ({ rain: Math.round(v * 10) / 10 }));
+    const popTrend  = getTrend(hourlyAll.precipitation_probability, v => ({ pop: v }));
 
     const advice = generateAdvice(cityKey, weather);
 
