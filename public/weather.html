@@ -348,7 +348,19 @@ function switchCity(k, el) {
   document.getElementById(`page-${k}`).classList.add('active');
   if (currentMode === 'today')    loadCity(k);
   if (currentMode === 'forecast') loadForecast(k);
-  if (currentMode === 'outfit')   loadOutfitPage(k);
+  if (currentMode === 'outfit') {
+    loadOutfitPage(k);
+    // 如果之前有查詢過，自動帶入同一天重新查詢
+    if (lastOutfitDate) {
+      setTimeout(() => {
+        const dateEl = document.getElementById('og-date');
+        if (dateEl) {
+          dateEl.value = lastOutfitDate;
+          queryOutfit(k);
+        }
+      }, 50);
+    }
+  }
 }
 
 function switchMode(mode, el) {
@@ -577,9 +589,12 @@ function loadOutfitPage(k) {
     <div class="card">${monthRows}</div>`;
 }
 
+let lastOutfitDate = null;
+
 async function queryOutfit(k) {
   const date = document.getElementById('og-date')?.value;
   if (!date) return;
+  lastOutfitDate = date; // 記住這次查詢的日期
   const el = document.getElementById('og-result');
   el.innerHTML = `<div class="loading"><div class="spinner"></div><div>計算穿著建議中…</div></div>`;
   try {
