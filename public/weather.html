@@ -210,30 +210,40 @@ body {
 }
 .og-btn:active { opacity: 0.8; }
 .og-hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
-.og-result { margin: 12px 16px 0; background: var(--card); border-radius: var(--radius); overflow: hidden; }
-.og-result-header { background: var(--blue); padding: 16px; color: white; }
-.og-result-city { font-size: 18px; font-weight: 700; }
-.og-result-date { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 2px; }
-.og-result-temps { display: flex; gap: 8px; margin-top: 10px; }
+.og-result { margin: 12px 16px 0; background: var(--card); border-radius: var(--radius); overflow: hidden; border: 2px solid var(--orange); }
+.og-result-header { padding: 16px 16px 12px; }
+.og-result-top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.og-result-icon { font-size: 28px; }
+.og-result-city { font-size: 18px; font-weight: 700; color: var(--text); }
+.og-result-date { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.og-result-temps { display: flex; gap: 6px; margin-top: 8px; align-items: center; font-size: 16px; font-weight: 700; }
+.og-temp-high { color: #E23030; }
+.og-temp-low  { color: var(--blue); }
+.og-temp-src  { font-size: 12px; color: var(--muted); font-weight: 400; }
 .og-temp-badge {
   font-size: 14px; font-weight: 600;
   background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px;
 }
 .og-warning {
-  background: rgba(255,107,0,0.08); border: 1px solid rgba(255,107,0,0.2);
-  padding: 12px 16px; font-size: 14px; color: #C04D00; line-height: 1.5;
+  margin: 0 16px 8px; background: rgba(255,107,0,0.08);
+  border: 1px solid rgba(255,107,0,0.2);
+  padding: 10px 14px; font-size: 14px; color: #C04D00; line-height: 1.5;
+  border-radius: 10px;
 }
 .og-section-lbl {
-  padding: 12px 16px 4px; font-size: 13px; font-weight: 600;
-  color: var(--muted); border-top: 0.5px solid var(--border);
+  padding: 14px 16px 6px; font-size: 15px; font-weight: 700;
+  color: var(--text); border-top: 0.5px solid var(--border);
+  display: flex; align-items: center; gap: 6px;
 }
 .og-section-lbl:first-of-type { border-top: none; }
 .og-layer-row {
-  padding: 11px 16px; border-bottom: 0.5px solid var(--border);
+  margin: 4px 12px; padding: 11px 14px;
+  background: var(--bg); border-radius: 10px;
   display: flex; gap: 10px; align-items: flex-start;
-  font-size: 14px; color: var(--text2); line-height: 1.5;
+  font-size: 15px; color: var(--text2); line-height: 1.5;
+  margin-bottom: 6px;
 }
-.og-layer-row:last-child { border-bottom: none; }
+.og-layer-row:last-child { margin-bottom: 12px; }
 .og-dot-blue {
   width: 7px; height: 7px; border-radius: 50%;
   background: var(--blue); flex-shrink: 0; margin-top: 5px;
@@ -243,8 +253,9 @@ body {
   background: var(--muted); flex-shrink: 0; margin-top: 5px;
 }
 .og-season-note {
-  padding: 12px 16px; font-size: 13px; color: var(--muted);
-  line-height: 1.5; border-top: 0.5px solid var(--border);
+  margin: 4px 12px 12px; padding: 11px 14px;
+  background: var(--bg); border-radius: 10px;
+  font-size: 14px; color: var(--muted); line-height: 1.5;
 }
 .month-row {
   padding: 13px 16px; border-bottom: 0.5px solid var(--border);
@@ -522,18 +533,24 @@ async function queryOutfit(k) {
     el.innerHTML = `
       <div class="og-result">
         <div class="og-result-header">
-          <div class="og-result-city">${data.city}</div>
-          <div class="og-result-date">${dl} ${data.isPast ? '（實際歷史）' : '（歷史平均推算）'}</div>
+          <div class="og-result-top">
+            <div class="og-result-icon">${o.icon}</div>
+            <div>
+              <div class="og-result-city">${data.city}・${dl}</div>
+              <div class="og-result-date">${data.isPast ? '實際歷史資料' : '過去 5 年同期平均'}</div>
+            </div>
+          </div>
           <div class="og-result-temps">
-            <div class="og-temp-badge">高 ${o.avgTempMax}°C</div>
-            <div class="og-temp-badge">低 ${o.avgTempMin}°C</div>
+            <span class="og-temp-high">${o.avgTempMax}°C</span>
+            <span style="color:var(--muted);">/</span>
+            <span class="og-temp-low">${o.avgTempMin}°C</span>
           </div>
         </div>
         ${o.warning ? `<div class="og-warning">${o.warning}</div>` : ''}
-        <div class="og-section-lbl">上身穿搭</div>
-        ${o.layers.map(l => `<div class="og-layer-row"><div class="og-dot-blue"></div><div>${l}</div></div>`).join('')}
-        <div class="og-section-lbl">其他穿著</div>
-        ${o.items.map(i => `<div class="og-layer-row"><div class="og-dot-gray"></div><div>${i}</div></div>`).join('')}
+        <div class="og-section-lbl">👕 上身穿搭</div>
+        ${o.layers.map(l => `<div class="og-layer-row"><span style="color:var(--orange);font-weight:700;flex-shrink:0;">▸</span><div>${l}</div></div>`).join('')}
+        <div class="og-section-lbl">🥾 其他穿著</div>
+        ${o.items.map(i => `<div class="og-layer-row"><span style="color:var(--orange);font-weight:700;flex-shrink:0;">▸</span><div>${i}</div></div>`).join('')}
         <div class="og-season-note">💡 ${o.seasonNote}</div>
       </div>`;
   } catch {
