@@ -23,9 +23,12 @@ const { recommendSpots } = require('./spots');
 // 城市資料（Open-Meteo 用經緯度）
 // ================================================
 const CITIES = {
-  asahikawa: { name: '旭川', lat: 43.77,  lon: 142.36, jma: '012000' },
-  biei:      { name: '美瑛', lat: 43.584, lon: 142.464, jma: '012000' },
-  furano:    { name: '富良野', lat: 43.34, lon: 142.38, jma: '012000' },
+  asahikawa:   { name: '旭川',  lat: 43.77,  lon: 142.36,  jma: '012000' },
+  biei:        { name: '美瑛',  lat: 43.584, lon: 142.464, jma: '012000' },
+  furano:      { name: '富良野',lat: 43.34,  lon: 142.38,  jma: '012000' },
+  higashikawa: { name: '東川',  lat: 43.695, lon: 142.476, jma: '012000' },
+  nayoro:      { name: '名寄',  lat: 44.354, lon: 142.463, jma: '012000' },
+  wakkanai:    { name: '稚內',  lat: 45.416, lon: 141.673, jma: '011000' },
 };
 
 // ================================================

@@ -50,8 +50,8 @@ body {
   border-bottom: 0.5px solid var(--border); padding: 0 4px;
 }
 .city-btn {
-  flex: 1; padding: 14px 8px; text-align: center;
-  font-size: 15px; font-weight: 500; color: var(--muted);
+  flex: 1; padding: 12px 4px; text-align: center;
+  font-size: 13px; font-weight: 500; color: var(--muted);
   border: none; background: none; cursor: pointer;
   border-bottom: 2px solid transparent; transition: all 0.18s;
   font-family: inherit;
@@ -290,6 +290,9 @@ body {
   <button class="city-btn active" onclick="switchCity('asahikawa',this)">旭川</button>
   <button class="city-btn" onclick="switchCity('biei',this)">美瑛</button>
   <button class="city-btn" onclick="switchCity('furano',this)">富良野</button>
+  <button class="city-btn" onclick="switchCity('higashikawa',this)">東川</button>
+  <button class="city-btn" onclick="switchCity('nayoro',this)">名寄</button>
+  <button class="city-btn" onclick="switchCity('wakkanai',this)">稚內</button>
 </div>
 
 <div class="mode-picker">
@@ -305,6 +308,9 @@ body {
     <div class="city-content active" id="page-asahikawa"></div>
     <div class="city-content" id="page-biei"></div>
     <div class="city-content" id="page-furano"></div>
+    <div class="city-content" id="page-higashikawa"></div>
+    <div class="city-content" id="page-nayoro"></div>
+    <div class="city-content" id="page-wakkanai"></div>
   </div>
   <div id="mode-forecast" style="display:none;"><div id="forecast-content"></div></div>
   <div id="mode-outfit"   style="display:none;"><div id="outfit-content"></div></div>
@@ -316,7 +322,7 @@ const cache = {};
 let currentCity = 'asahikawa';
 let currentMode = 'today';
 
-const CITY_NAME = {asahikawa:'旭川', biei:'美瑛', furano:'富良野'};
+const CITY_NAME = {asahikawa:'旭川', biei:'美瑛', furano:'富良野', higashikawa:'東川', nayoro:'名寄', wakkanai:'稚內'};
 const MONTH_NOTES = {
   1:'最冷月份，旭川冰雪節，適合賞雪', 2:'旭川冬まつり，企鵝散步限定',
   3:'開始融雪，道路仍泥濘', 4:'氣溫回升，部分景點開業',
