@@ -435,7 +435,7 @@ function renderCity(k, d) {
   const maxV = Math.max(...trendVals.map(t => t.v), 0.1);
   const allZ = trendVals.every(t => t.v === 0);
   const trendBars = allZ
-    ? `<div style="width:100%;text-align:center;font-size:13px;color:var(--muted);">今後無預測</div>`
+    ? `<div style="width:100%;text-align:center;font-size:14px;color:var(--muted);padding:8px 0;">☀️ 未來 6 小時無降雨預測</div>`
     : trendVals.map(t => {
         const pct = Math.max((t.v/maxV)*100, 5);
         return `<div class="trend-col">
