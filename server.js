@@ -578,6 +578,151 @@ app.get('/api/all-cities', async (req, res) => {
 // 健康檢查
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
+// ================================================
+// LINE Bot Webhook
+// ================================================
+const LINE_CHANNEL_SECRET      = process.env.LINE_CHANNEL_SECRET      || 'a80b8f3b6eb122684108d0edef094787';
+const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN || 'hbieCmkTrV1zhzViiXRCHUIk+vLPJkO7KUlfRdpaGmzUHCo7U55q5XIWJn4lCK7z/vCr8SMw9kt85WC2I3Mkaj0b0cYEOabtZ3weG0v9deNGSELfr/2V6pa8vlSOcoGooGdc0TlcqRqnNLrQBuXhCwdB04t89/1O/w1cDnyilFU=';
+
+const crypto = require('crypto');
+
+// 驗證 LINE 簽名
+function verifyLineSignature(body, signature) {
+  const hash = crypto
+    .createHmac('SHA256', LINE_CHANNEL_SECRET)
+    .update(body)
+    .digest('base64');
+  return hash === signature;
+}
+
+// 回覆訊息給 LINE
+async function replyMessage(replyToken, messages) {
+  await fetch('https://api.line.me/v2/bot/message/reply', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${LINE_CHANNEL_ACCESS_TOKEN}`,
+    },
+    body: JSON.stringify({ replyToken, messages }),
+  });
+}
+
+// 判斷城市關鍵字
+function detectCity(text) {
+  if (text.includes('旭川')) return 'asahikawa';
+  if (text.includes('美瑛')) return 'biei';
+  if (text.includes('富良野')) return 'furano';
+  if (text.includes('東川') || text.includes('旭岳')) return 'higashikawa';
+  if (text.includes('名寄')) return 'nayoro';
+  if (text.includes('稚內') || text.includes('宗谷')) return 'wakkanai';
+  return null;
+}
+
+// 處理使用者訊息
+async function handleMessage(event) {
+  if (event.type !== 'message' || event.message.type !== 'text') return;
+
+  const text = event.message.text.trim();
+  const replyToken = event.replyToken;
+
+  // 天氣查詢
+  const cityKey = detectCity(text);
+  const isWeatherQuery = text.includes('天氣') || text.includes('氣溫') || text.includes('下雪') || text.includes('幾度');
+
+  if (cityKey && isWeatherQuery) {
+    try {
+      const r = await fetch(`http://localhost:${PORT}/api/city?city=${cityKey}`);
+      const d = await r.json();
+      const w = d.weather;
+
+      await replyMessage(replyToken, [{
+        type: 'text',
+        text: `🌡️ ${d.city} 目前天氣\n\n` +
+              `天氣：${w.emoji} ${w.label}\n` +
+              `氣溫：${w.temp}°C（體感 ${w.feelsLike}°C）\n` +
+              `風速：${w.windSpeed} m/s\n` +
+              `濕度：${w.humidity}%\n` +
+              `降雪：${w.snowfall}mm\n\n` +
+              `👕 穿著建議\n${d.advice.summary}\n\n` +
+              `更新時間：${d.updatedAt}`,
+      }]);
+    } catch {
+      await replyMessage(replyToken, [{ type: 'text', text: '⚠️ 無法取得天氣資料，請稍後再試。' }]);
+    }
+    return;
+  }
+
+  // 景點查詢
+  if (text.includes('景點') || text.includes('推薦') || text.includes('去哪')) {
+    const city = cityKey || 'asahikawa';
+    try {
+      const r = await fetch(`http://localhost:${PORT}/api/city?city=${city}`);
+      const d = await r.json();
+      const spots = d.spots?.slice(0, 5) || [];
+      const spotText = spots.map(s => `• ${s.name}（${s.type}）`).join('\n');
+
+      await replyMessage(replyToken, [{
+        type: 'text',
+        text: `📍 ${d.city} 今日推薦景點\n\n${spotText}\n\n點擊景點名稱可在 Google 地圖搜尋！`,
+      }]);
+    } catch {
+      await replyMessage(replyToken, [{ type: 'text', text: '⚠️ 無法取得景點資料，請稍後再試。' }]);
+    }
+    return;
+  }
+
+  // 穿著查詢
+  if (text.includes('穿') || text.includes('衣服') || text.includes('外套')) {
+    const city = cityKey || 'asahikawa';
+    const today = new Date().toISOString().slice(0, 10);
+    try {
+      const r = await fetch(`http://localhost:${PORT}/api/outfit?city=${city}&date=${today}`);
+      const data = await r.json();
+      const o = data.outfit;
+      const layers = o.layers.join('、');
+      const items = o.items.slice(0, 2).join('、');
+
+      await replyMessage(replyToken, [{
+        type: 'text',
+        text: `👕 ${data.city} 今日穿著建議\n\n` +
+              `氣溫：${o.avgTempMax}°C / ${o.avgTempMin}°C\n\n` +
+              `上身：${layers}\n` +
+              `其他：${items}\n\n` +
+              `💡 ${o.seasonNote}`,
+      }]);
+    } catch {
+      await replyMessage(replyToken, [{ type: 'text', text: '⚠️ 無法取得穿著建議，請稍後再試。' }]);
+    }
+    return;
+  }
+
+  // 預設回覆
+  await replyMessage(replyToken, [{
+    type: 'text',
+    text: '您好！我是道北旅遊在地嚮導 🗺️\n\n' +
+          '可以問我：\n' +
+          '• 「旭川天氣」「美瑛幾度」\n' +
+          '• 「富良野景點推薦」\n' +
+          '• 「名寄今天穿什麼」\n\n' +
+          '或直接點下方選單查詢！',
+  }]);
+}
+
+// Webhook 端點
+app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  const signature = req.headers['x-line-signature'];
+  if (!verifyLineSignature(req.body, signature)) {
+    return res.status(403).send('Invalid signature');
+  }
+
+  const body = JSON.parse(req.body.toString());
+  res.status(200).send('OK'); // 先回應 LINE，避免 timeout
+
+  for (const event of body.events || []) {
+    await handleMessage(event).catch(console.error);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`✅ 道北天氣 v2 啟動 http://localhost:${PORT}`);
 });
