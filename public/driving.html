@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>自駕法規快查｜道北旅遊</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #F2F2F7;
+  --card: #FFFFFF;
+  --text: #1C1C1E;
+  --text2: #3A3A3C;
+  --muted: #8E8E93;
+  --border: rgba(0,0,0,0.08);
+  --blue: #1A7ACC;
+  --orange: #FF6B00;
+  --green: #34C759;
+  --red: #FF3B30;
+  --radius: 14px;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans TC', -apple-system, sans-serif;
+  min-height: 100vh;
+  max-width: 430px;
+  margin: 0 auto;
+  padding-bottom: 48px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+.header { background: #C0392B; padding: 52px 20px 20px; }
+.header-title { font-size: 20px; font-weight: 700; color: white; }
+.header-sub { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+
+/* 主選單 */
+.home-view { padding: 16px; }
+
+.top-alert {
+  background: rgba(255,59,48,0.08);
+  border: 1px solid rgba(255,59,48,0.2);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.top-alert-title { font-size: 14px; font-weight: 700; color: var(--red); margin-bottom: 5px; }
+.top-alert-body { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.menu-btn {
+  background: var(--card);
+  border: none;
+  border-radius: var(--radius);
+  padding: 18px 14px;
+  display: flex; flex-direction: column;
+  align-items: flex-start; gap: 8px;
+  cursor: pointer; transition: all 0.15s;
+  font-family: inherit;
+  text-align: left;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.menu-btn:active { transform: scale(0.97); }
+
+.menu-icon { font-size: 28px; }
+.menu-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.menu-sub  { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.menu-arrow { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* 緊急按鈕 - 全寬 */
+.emergency-full {
+  background: rgba(255,59,48,0.08);
+  border: 1.5px solid rgba(255,59,48,0.25);
+  border-radius: var(--radius);
+  padding: 16px 14px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer; font-family: inherit;
+  width: 100%; margin-top: 10px;
+  transition: all 0.15s;
+}
+.emergency-full:active { background: rgba(255,59,48,0.14); }
+.ef-icon { font-size: 28px; }
+.ef-text { flex: 1; text-align: left; }
+.ef-name { font-size: 15px; font-weight: 700; color: var(--red); }
+.ef-sub  { font-size: 12px; color: var(--muted); margin-top: 1px; }
+.ef-arrow { font-size: 16px; color: var(--red); }
+
+/* 詳細頁 */
+.detail-view { display: none; }
+
+.detail-header {
+  background: #C0392B;
+  padding: 52px 16px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.back-btn {
+  background: rgba(255,255,255,0.2);
+  border: none; border-radius: 8px;
+  padding: 6px 12px; color: white;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  flex-shrink: 0;
+}
+.detail-title { font-size: 16px; font-weight: 700; color: white; }
+
+.detail-content { padding: 16px; }
+
+/* 規則卡 */
+.rule-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.rule-card-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+.rule-card-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.rc-red    { background: rgba(255,59,48,0.1); }
+.rc-orange { background: rgba(255,107,0,0.1); }
+.rc-blue   { background: rgba(26,122,204,0.1); }
+.rc-green  { background: rgba(52,199,89,0.1); }
+
+.rule-card-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.rule-card-body  { font-size: 14px; color: var(--text2); line-height: 1.7; }
+
+.tag {
+  display: inline-block; margin-top: 8px;
+  font-size: 11px; font-weight: 700;
+  padding: 3px 10px; border-radius: 8px;
+}
+.tag-red    { background: rgba(255,59,48,0.1); color: var(--red); }
+.tag-blue   { background: rgba(26,122,204,0.1); color: var(--blue); }
+.tag-orange { background: rgba(255,107,0,0.1); color: var(--orange); }
+.tag-green  { background: rgba(52,199,89,0.1); color: #1A7A46; }
+
+/* 速限視覺 */
+.speed-visual {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.speed-circle {
+  width: 64px; height: 64px; border-radius: 50%;
+  border: 4px solid var(--red);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.speed-num  { font-size: 18px; font-weight: 900; color: var(--red); line-height: 1; }
+.speed-unit { font-size: 8px; color: var(--muted); }
+.speed-desc { font-size: 12px; color: var(--text2); line-height: 1.5; margin-top: 4px; }
+
+/* 停車收費視覺 */
+.parking-steps {
+  display: flex; align-items: center; gap: 6px;
+  margin: 10px 0; flex-wrap: wrap;
+}
+.park-step {
+  background: var(--bg);
+  border-radius: 8px; padding: 8px 10px;
+  font-size: 12px; color: var(--text2);
+  text-align: center; flex: 1; min-width: 60px;
+}
+.park-step-icon { font-size: 18px; display: block; margin-bottom: 3px; }
+.park-arrow { color: var(--muted); font-size: 14px; flex-shrink: 0; }
+
+/* 緊急電話 */
+.phone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.phone-btn {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 16px 12px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  text-decoration: none; transition: all 0.15s;
+}
+.phone-btn:active { background: var(--bg); }
+.phone-icon { font-size: 28px; }
+.phone-name { font-size: 12px; font-weight: 700; color: var(--text); }
+.phone-num  { font-size: 20px; font-weight: 900; color: var(--red); }
+.phone-note { font-size: 10px; color: var(--muted); text-align: center; }
+
+.accident-steps {
+  counter-reset: step;
+}
+.accident-step {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 10px 0; border-bottom: 0.5px solid var(--border);
+}
+.accident-step:last-child { border-bottom: none; }
+.step-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--red); color: white;
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.step-text { font-size: 14px; color: var(--text2); line-height: 1.5; }
+
+.disclaimer {
+  margin-top: 16px; padding: 12px 14px;
+  background: var(--card); border-radius: var(--radius);
+  font-size: 12px; color: var(--muted); line-height: 1.6;
+}
+</style>
+</head>
+<body>
+
+<!-- 主選單 -->
+<div id="home-view">
+  <div class="header">
+    <div class="header-title">🚗 自駕法規快查</div>
+    <div class="header-sub">想查什麼，點進去看</div>
+  </div>
+
+  <div class="home-view">
+    <div class="top-alert">
+      <div class="top-alert-title">🚨 最多人搞錯</div>
+      <div class="top-alert-body">日本開車需要<strong>台灣駕照正本＋日文譯本</strong>，不是國際駕照！監理所申請，約 100 元台幣。</div>
+    </div>
+
+    <div class="menu-grid">
+      <button class="menu-btn" onclick="showDetail('basic')">
+        <div class="menu-icon">🚦</div>
+        <div class="menu-name">基本規則</div>
+        <div class="menu-sub">止まれ・右轉・酒駕</div>
+        <div class="menu-arrow">→</div>
+      </button>
+      <button class="menu-btn" onclick="showDetail('speed')">
+        <div class="menu-icon">⚡</div>
+        <div class="menu-name">速度限制</div>
+        <div class="menu-sub">市區・郊區・高速</div>
+        <div class="menu-arrow">→</div>
+      </button>
+      <button class="menu-btn" onclick="showDetail('snow')">
+        <div class="menu-icon">❄️</div>
+        <div class="menu-name">雪地駕駛</div>
+        <div class="menu-sub">黑冰・雪胎・雪地模式</div>
+        <div class="menu-arrow">→</div>
+      </button>
+      <button class="menu-btn" onclick="showDetail('parking')">
+        <div class="menu-icon">🅿️</div>
+        <div class="menu-name">停車規則</div>
+        <div class="menu-sub">收費方式・違停</div>
+        <div class="menu-arrow">→</div>
+      </button>
+    </div>
+
+    <button class="emergency-full" onclick="showDetail('emergency')">
+      <div class="ef-icon">🆘</div>
+      <div class="ef-text">
+        <div class="ef-name">出事怎麼辦・緊急電話</div>
+        <div class="ef-sub">事故處理步驟・110・119・JAF</div>
+      </div>
+      <div class="ef-arrow">→</div>
+    </button>
+  </div>
+</div>
+
+<!-- 基本規則 -->
+<div class="detail-view" id="detail-basic">
+  <div class="detail-header">
+    <button class="back-btn" onclick="goHome()">← 返回</button>
+    <div class="detail-title">🚦 基本行車規則</div>
+  </div>
+  <div class="detail-content">
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-red">🛑</div>
+        <div class="rule-card-title">止まれ（一時停止）</div>
+      </div>
+      <div class="rule-card-body">路面或標誌出現「止まれ」，輪子必須<strong>完全停止</strong>，等 3 秒確認安全才能前進。只是踩一下煞車減速不算！</div>
+      <span class="tag tag-red">違規罰款 7,000 円起</span>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-orange">↪️</div>
+        <div class="rule-card-title">右轉要駛入內側車道</div>
+      </div>
+      <div class="rule-card-body">右轉完成後要待在<strong>內側車道</strong>，不要馬上切到外側。外側是超車道，佔用會被後車超車切進來。<br><br>多車道右轉時，不要刻意繞過槽化線。</div>
+      <span class="tag tag-orange">台灣人最常犯的錯誤</span>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-red">📱</div>
+        <div class="rule-card-title">禁止手持手機</div>
+      </div>
+      <div class="rule-card-body">開車中手持手機嚴格禁止，<strong>包含看地圖</strong>。請用手機支架固定，由副駕駛操作導航。</div>
+      <span class="tag tag-red">罰款最高 18,000 円</span>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-red">🍺</div>
+        <div class="rule-card-title">零酒精才能開車</div>
+      </div>
+      <div class="rule-card-body">微量酒精就違法，同車知情乘客也會被罰。泡完溫泉喝了啤酒絕對不能開車。</div>
+      <span class="tag tag-red">最高罰款 50 萬円＋吊照</span>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-blue">🔦</div>
+        <div class="rule-card-title">隧道強制開燈</div>
+      </div>
+      <div class="rule-card-body">進入隧道必須開大燈，北海道山區隧道很多，記得進入前開燈。</div>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-blue">🚦</div>
+        <div class="rule-card-title">靠左行駛</div>
+      </div>
+      <div class="rule-card-body">和台灣相同靠左行駛，方向盤在右邊。但在日本初次開車容易感覺車道偏移，剛開始<strong>降速適應 30 分鐘</strong>後會習慣。</div>
+      <span class="tag tag-blue">第一天最需要專注</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- 速限 -->
+<div class="detail-view" id="detail-speed">
+  <div class="detail-header">
+    <button class="back-btn" onclick="goHome()">← 返回</button>
+    <div class="detail-title">⚡ 速度限制</div>
+  </div>
+  <div class="detail-content">
+
+    <div class="rule-card">
+      <div class="speed-visual">
+        <div>
+          <div class="speed-circle"><div class="speed-num">30</div><div class="speed-unit">km/h</div></div>
+          <div class="speed-desc">住宅區<br>學校附近</div>
+        </div>
+        <div>
+          <div class="speed-circle"><div class="speed-num">40</div><div class="speed-unit">km/h</div></div>
+          <div class="speed-desc">一般<br>市區道路</div>
+        </div>
+        <div>
+          <div class="speed-circle"><div class="speed-num">60</div><div class="speed-unit">km/h</div></div>
+          <div class="speed-desc">郊區<br>一般道路</div>
+        </div>
+        <div>
+          <div class="speed-circle"><div class="speed-num">80</div><div class="speed-unit">km/h</div></div>
+          <div class="speed-desc">高速<br>公路</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-orange">⚠️</div>
+        <div class="rule-card-title">冬季建議速度</div>
+      </div>
+      <div class="rule-card-body">雪地和結冰路面，實際行駛速度建議比限速低 20-30%。<br><br>
+        一般道路雪地 → 建議 <strong>30-40 km/h</strong><br>
+        高速公路雪地 → 建議 <strong>50-60 km/h</strong>
+      </div>
+      <span class="tag tag-orange">煞車距離是乾燥路面 3-5 倍</span>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-blue">📍</div>
+        <div class="rule-card-title">道北常見路況</div>
+      </div>
+      <div class="rule-card-body">
+        旭川市區：多為 40 km/h<br>
+        美瑛・富良野丘陵路：60 km/h，彎道多請降速<br>
+        道央道・旭川紋別道：80 km/h
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 雪地駕駛 -->
+<div class="detail-view" id="detail-snow">
+  <div class="detail-header">
+    <button class="back-btn" onclick="goHome()">← 返回</button>
+    <div class="detail-title">❄️ 雪地駕駛</div>
+  </div>
+  <div class="detail-content">
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-blue">🔧</div>
+        <div class="rule-card-title">領車時確認雪胎</div>
+      </div>
+      <div class="rule-card-body">領車時請確認已安裝雪胎（スタッドレス），請工作人員確認。部分租車平台訂車時需要主動勾選，建議出發前用 Email 確認。</div>
+      <span class="tag tag-blue">沒有雪胎在雪地根本無法控制</span>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-orange">🧊</div>
+        <div class="rule-card-title">融雪後結冰最危險</div>
+      </div>
+      <div class="rule-card-body">積雪路面反而好開，<strong>最危險的是融雪後又結冰</strong>的路面，黑冰（ブラックアイス）看起來像濕的但其實是冰。<br><br>好發地點：清晨、橋上、交叉路口<br><br>遇到時：不要急踩煞車，緩慢放油門讓車滑行。</div>
+      <span class="tag tag-red">最難察覺的路況</span>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-green">🚗</div>
+        <div class="rule-card-title">雪地模式怎麼用</div>
+      </div>
+      <div class="rule-card-body">可以開就開，主要作用是<strong>避免起步和加速打滑</strong>。速度超過約 40 km/h 後自動解除，不要過度依賴。</div>
+      <span class="tag tag-green">起步時最有效</span>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-orange">⛰️</div>
+        <div class="rule-card-title">小山路不要冒險進入</div>
+      </div>
+      <div class="rule-card-body">主要道路除雪很勤，但太小的山路和農路積雪沒人清。一旦卡在雪中，救援費用很高且嚴重耽誤行程。</div>
+      <span class="tag tag-red">卡雪救援費 約 30,000 円起</span>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-blue">🌨️</div>
+        <div class="rule-card-title">出發前清除車頂積雪</div>
+      </div>
+      <div class="rule-card-body">行駛時車頂的雪會滑落到後方車輛，危險且違法。租車場通常有雪刷，請工作人員示範使用方式。</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 停車 -->
+<div class="detail-view" id="detail-parking">
+  <div class="detail-header">
+    <button class="back-btn" onclick="goHome()">← 返回</button>
+    <div class="detail-title">🅿️ 停車規則</div>
+  </div>
+  <div class="detail-content">
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-green">😊</div>
+        <div class="rule-card-title">北海道停車很好找</div>
+      </div>
+      <div class="rule-card-body">不像大城市，旭川、富良野、美瑛停車場很多，稍微繞一下就能找到，<strong>不需要事先預訂</strong>。自駕行程建議選有停車場的飯店。</div>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-blue">💴</div>
+        <div class="rule-card-title">停車場收費方式</div>
+      </div>
+      <div class="parking-steps">
+        <div class="park-step"><span class="park-step-icon">🎫</span>進場取票</div>
+        <div class="park-arrow">→</div>
+        <div class="park-step"><span class="park-step-icon">🏧</span>繳費機付款</div>
+        <div class="park-arrow">→</div>
+        <div class="park-step"><span class="park-step-icon">🚗</span>取車離場</div>
+      </div>
+      <div class="rule-card-body">市區停車約每小時 100-200 円，一天約 1,000-1,500 円。<strong>先繳費再取車</strong>，不要反過來。</div>
+      <span class="tag tag-blue">備好零錢和小鈔</span>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-orange">🏢</div>
+        <div class="rule-card-title">立體停車塔注意車高</div>
+      </div>
+      <div class="rule-card-body">立體停車塔有車高限制（通常 1.55m-2.0m）。大型廂型車、SUV 要特別確認，超高請找<strong>平面停車場</strong>。</div>
+      <span class="tag tag-orange">超高進入可能造成損壞</span>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-blue">🔍</div>
+        <div class="rule-card-title">如何找停車場</div>
+      </div>
+      <div class="rule-card-body">Google 地圖搜尋「<strong>駐車場</strong>」或「コインパーキング」，可看到附近停車場位置、費用和即時空位。</div>
+      <span class="tag tag-blue">出發前先存好地圖</span>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-red">🚫</div>
+        <div class="rule-card-title">路邊違規停車</div>
+      </div>
+      <div class="rule-card-body">黃線禁止停車，白線只能短暫停車且<strong>人不能離開車輛</strong>。被拖吊費用很高，建議使用正規停車場。</div>
+      <span class="tag tag-red">拖吊費約 30,000 円起</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- 緊急 -->
+<div class="detail-view" id="detail-emergency">
+  <div class="detail-header">
+    <button class="back-btn" onclick="goHome()">← 返回</button>
+    <div class="detail-title">🆘 出事怎麼辦</div>
+  </div>
+  <div class="detail-content">
+
+    <div class="rule-card">
+      <div class="rule-card-header">
+        <div class="rule-card-icon rc-red">🚨</div>
+        <div class="rule-card-title">發生事故的處理步驟</div>
+      </div>
+      <div class="accident-steps">
+        <div class="accident-step">
+          <div class="step-num">1</div>
+          <div class="step-text">確認所有人員安全，移到安全位置</div>
+        </div>
+        <div class="accident-step">
+          <div class="step-num">2</div>
+          <div class="step-text">打 <strong>110</strong> 報警，有傷者打 <strong>119</strong></div>
+        </div>
+        <div class="accident-step">
+          <div class="step-num">3</div>
+          <div class="step-text">聯絡租車公司（號碼在合約上）</div>
+        </div>
+        <div class="accident-step">
+          <div class="step-num">4</div>
+          <div class="step-text">拍照記錄現場和車輛損傷</div>
+        </div>
+        <div class="accident-step">
+          <div class="step-num">5</div>
+          <div class="step-text">不要私下和對方和解，等警察來</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px; font-size:13px; font-weight:600; color:var(--muted); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">緊急電話（點擊直接撥打）</div>
+
+    <div class="phone-grid">
+      <a href="tel:110" class="phone-btn">
+        <div class="phone-icon">👮</div>
+        <div class="phone-name">警察</div>
+        <div class="phone-num">110</div>
+        <div class="phone-note">事故・犯罪</div>
+      </a>
+      <a href="tel:119" class="phone-btn">
+        <div class="phone-icon">🚑</div>
+        <div class="phone-name">救護・消防</div>
+        <div class="phone-num">119</div>
+        <div class="phone-note">受傷・火災</div>
+      </a>
+      <a href="tel:0570-00-2811" class="phone-btn">
+        <div class="phone-icon">🔧</div>
+        <div class="phone-name">JAF 道路救援</div>
+        <div class="phone-num" style="font-size:13px;">0570-00-2811</div>
+        <div class="phone-note">拋錨・卡雪</div>
+      </a>
+      <a href="tel:7119" class="phone-btn">
+        <div class="phone-icon">🏥</div>
+        <div class="phone-name">救護諮詢</div>
+        <div class="phone-num">#7119</div>
+        <div class="phone-note">需不需要救護車</div>
+      </a>
+    </div>
+
+    <div class="disclaimer">
+      ⚠️ 本頁資訊僅供參考，實際法規請以日本官方公告為準，出發前建議再次確認最新規定。
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showDetail(id) {
+  document.getElementById('home-view').style.display = 'none';
+  document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none');
+  document.getElementById(`detail-${id}`).style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function goHome() {
+  document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none');
+  document.getElementById('home-view').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
