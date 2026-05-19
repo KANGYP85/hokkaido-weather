@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>出發前檢查｜道北旅遊</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #F2F2F7;
+  --card: #FFFFFF;
+  --text: #1C1C1E;
+  --text2: #3A3A3C;
+  --muted: #8E8E93;
+  --border: rgba(0,0,0,0.08);
+  --blue: #1A7ACC;
+  --orange: #FF6B00;
+  --green: #34C759;
+  --red: #FF3B30;
+  --radius: 14px;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans TC', -apple-system, sans-serif;
+  min-height: 100vh;
+  max-width: 430px;
+  margin: 0 auto;
+  padding-bottom: 48px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+.header { background: var(--blue); padding: 52px 20px 20px; }
+.header-title { font-size: 20px; font-weight: 700; color: white; }
+.header-sub { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+
+/* Type selector */
+.type-section { padding: 16px 16px 0; }
+.type-label { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.type-btn {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer; transition: all 0.15s;
+  font-family: inherit;
+}
+.type-btn.active {
+  border-color: var(--blue);
+  background: rgba(26,122,204,0.06);
+}
+.type-icon { font-size: 22px; flex-shrink: 0; }
+.type-name { font-size: 13px; font-weight: 600; color: var(--text); text-align: left; }
+.type-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+/* Progress bar */
+.progress-section { margin: 16px 16px 0; }
+.progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.progress-label { font-size: 13px; font-weight: 600; color: var(--text); }
+.progress-count { font-size: 13px; font-weight: 700; color: var(--blue); }
+.progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--green)); border-radius: 3px; transition: width 0.3s ease; }
+
+/* Section */
+.section-title {
+  font-size: 13px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin: 20px 16px 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-badge {
+  font-size: 11px; font-weight: 600;
+  background: rgba(26,122,204,0.1); color: var(--blue);
+  padding: 2px 8px; border-radius: 10px;
+}
+
+/* Checklist */
+.card { background: var(--card); border-radius: var(--radius); margin: 0 16px; overflow: hidden; }
+
+.check-row {
+  padding: 13px 16px;
+  border-bottom: 0.5px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer; transition: background 0.1s;
+  user-select: none;
+}
+.check-row:last-child { border-bottom: none; }
+.check-row:active { background: var(--bg); }
+
+.check-box {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.15s;
+  font-size: 13px;
+}
+.check-row.checked .check-box {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+
+.check-text { flex: 1; }
+.check-name { font-size: 15px; font-weight: 500; color: var(--text); transition: all 0.15s; }
+.check-row.checked .check-name { color: var(--muted); text-decoration: line-through; }
+.check-note { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+.check-important { color: var(--orange); font-size: 11px; font-weight: 600; margin-top: 3px; }
+
+/* Info card */
+.info-card {
+  margin: 12px 16px 0;
+  background: rgba(255,107,0,0.08);
+  border: 1px solid rgba(255,107,0,0.2);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 13px; color: #C04D00; line-height: 1.6;
+}
+
+/* Reset btn */
+.reset-btn {
+  display: block; margin: 20px 16px 0;
+  background: none; border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 12px;
+  font-size: 14px; font-weight: 600; color: var(--muted);
+  cursor: pointer; width: calc(100% - 32px); font-family: inherit;
+  transition: all 0.15s;
+}
+.reset-btn:active { background: var(--bg); }
+
+/* Complete banner */
+.complete-banner {
+  margin: 12px 16px 0;
+  background: rgba(52,199,89,0.1);
+  border: 1px solid rgba(52,199,89,0.3);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: none; align-items: center; gap: 10px;
+}
+.complete-banner.show { display: flex; }
+.complete-text { font-size: 14px; font-weight: 600; color: #1A7A46; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">🧳 出發前檢查</div>
+  <div class="header-sub">勾選完成的項目，不怕忘東忘西</div>
+</div>
+
+<!-- 旅遊類型 -->
+<div class="type-section">
+  <div class="type-label">選擇旅遊類型</div>
+  <div class="type-grid" id="type-grid">
+    <button class="type-btn active" onclick="selectType('winter', this)">
+      <div class="type-icon">❄️</div>
+      <div><div class="type-name">冬天自駕</div><div class="type-sub">雪季・自駕</div></div>
+    </button>
+    <button class="type-btn" onclick="selectType('family', this)">
+      <div class="type-icon">👨‍👩‍👧</div>
+      <div><div class="type-name">親子旅遊</div><div class="type-sub">小孩同行</div></div>
+    </button>
+    <button class="type-btn" onclick="selectType('ski', this)">
+      <div class="type-icon">⛷️</div>
+      <div><div class="type-name">滑雪旅行</div><div class="type-sub">滑雪場</div></div>
+    </button>
+    <button class="type-btn" onclick="selectType('senior', this)">
+      <div class="type-icon">👴</div>
+      <div><div class="type-name">長輩同行</div><div class="type-sub">銀髮旅遊</div></div>
+    </button>
+    <button class="type-btn" onclick="selectType('summer', this)">
+      <div class="type-icon">🌸</div>
+      <div><div class="type-name">夏秋旅遊</div><div class="type-sub">花季・紅葉</div></div>
+    </button>
+    <button class="type-btn" onclick="selectType('final', this)">
+      <div class="type-icon">✈️</div>
+      <div><div class="type-name">出發當天</div><div class="type-sub">最後確認</div></div>
+    </button>
+  </div>
+</div>
+
+<!-- 進度條 -->
+<div class="progress-section">
+  <div class="progress-header">
+    <div class="progress-label" id="progress-label">出發前 3 天檢查</div>
+    <div class="progress-count"><span id="checked-count">0</span> / <span id="total-count">0</span></div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+</div>
+
+<!-- 完成橫幅 -->
+<div class="complete-banner" id="complete-banner">
+  <div style="font-size:24px;">🎉</div>
+  <div class="complete-text">全部完成！安心出發吧！</div>
+</div>
+
+<!-- 清單內容 -->
+<div id="checklist-content"></div>
+
+<!-- 重置按鈕 -->
+<button class="reset-btn" onclick="resetAll()">重置所有勾選</button>
+
+<script>
+const CHECKLISTS = {
+  winter: {
+    label: '冬天自駕 — 出發前 3 天',
+    info: '⚠️ 日本開車需要「駕照日文譯本」，不是國際駕照！請務必提前在台灣監理所申請。',
+    sections: [
+      {
+        title: '📄 證件與租車',
+        badge: '最重要',
+        items: [
+          { name: '護照', note: '有效期限至少 6 個月以上' },
+          { name: '台灣駕照正本', note: '', important: '必備！沒有正本無法租車' },
+          { name: '駕照日文譯本', note: '台灣監理所申請，約 100 元台幣', important: '必備！不是國際駕照' },
+          { name: '租車預約確認單', note: '建議列印紙本備用' },
+          { name: '信用卡', note: '租車需要壓授權金' },
+          { name: '旅遊保險資料', note: '含緊急聯絡電話' },
+          { name: 'eSIM 或 Wi-Fi 分享器', note: '日本導航必須有網路' },
+          { name: '航班與住宿確認信', note: '建議截圖存離線備用' },
+        ]
+      },
+      {
+        title: '🧥 冬季保暖',
+        items: [
+          { name: '發熱衣（至少 2 件）', note: 'Uniqlo 極暖型最推薦' },
+          { name: '中層刷毛或薄羽絨', note: '穿脫方便最重要' },
+          { name: '防風防水外套', note: '旭川冬天風很大' },
+          { name: '雪靴或防滑鞋', note: '', important: '平底鞋在結冰路面非常危險' },
+          { name: '毛帽', note: '' },
+          { name: '圍脖或圍巾', note: '' },
+          { name: '手套（防水款）', note: '一般毛線手套沾水會更冷' },
+          { name: '厚襪（備用多帶一雙）', note: '' },
+          { name: '暖暖包', note: '到北海道買也可以，便宜又方便' },
+        ]
+      },
+      {
+        title: '🚗 雪地自駕用品',
+        items: [
+          { name: '太陽眼鏡', note: '雪地反光非常刺眼' },
+          { name: '車用充電線', note: '導航耗電快' },
+          { name: '手機支架', note: '日本規定不能手持手機開車' },
+          { name: '離線地圖', note: '山區收訊差，Google Maps 先下載離線地圖' },
+          { name: '飲用水（小瓶）', note: '冬天也會口渴' },
+          { name: '簡單零食', note: '郊區有時很難找到餐廳' },
+          { name: '現金與零錢', note: '', important: '道北鄉下很多地方只收現金' },
+        ]
+      },
+    ]
+  },
+  family: {
+    label: '親子旅遊 — 出發前確認',
+    info: '💡 北海道很多地方沒有大型育嬰室，建議民宿或飯店事先確認設備。',
+    sections: [
+      {
+        title: '📄 證件',
+        badge: '最重要',
+        items: [
+          { name: '全家護照', note: '小孩護照有效期限確認' },
+          { name: '台灣駕照正本', important: '必備' },
+          { name: '駕照日文譯本', important: '必備！不是國際駕照' },
+          { name: '健保卡（備用）', note: '' },
+          { name: '旅遊保險', note: '含兒童醫療保障' },
+        ]
+      },
+      {
+        title: '👧 小孩專用',
+        items: [
+          { name: '小孩手套（備用一雙）', note: '小孩容易弄濕弄丟' },
+          { name: '多一雙備用襪子', note: '' },
+          { name: '防水外褲', note: '玩雪必備' },
+          { name: '退燒藥', note: '台灣買好帶去，日本藥名不同' },
+          { name: '暈車藥', note: '北海道山路多彎道' },
+          { name: '保溫瓶', note: '裝熱水給小孩喝' },
+          { name: '濕紙巾', note: '多帶幾包' },
+          { name: '塑膠袋', note: '暈車備用' },
+          { name: '小孩常用藥', note: '感冒藥、腸胃藥' },
+        ]
+      },
+      {
+        title: '🧥 保暖',
+        items: [
+          { name: '發熱衣', note: '大人小孩都要' },
+          { name: '防滑雪靴', important: '小孩平底鞋非常危險' },
+          { name: '手套', note: '' },
+          { name: '毛帽', note: '' },
+        ]
+      },
+    ]
+  },
+  ski: {
+    label: '滑雪旅行 — 出發前確認',
+    info: '💡 第一次滑雪不用全買，確認滑雪場租借項目後再決定要帶什麼。',
+    sections: [
+      {
+        title: '📄 證件',
+        badge: '最重要',
+        items: [
+          { name: '護照', note: '' },
+          { name: '台灣駕照正本', important: '租車必備' },
+          { name: '駕照日文譯本', important: '必備' },
+          { name: '旅遊保險', note: '確認有涵蓋滑雪活動' },
+          { name: '滑雪場預訂確認', note: '' },
+        ]
+      },
+      {
+        title: '⛷️ 滑雪裝備',
+        items: [
+          { name: '雪衣', note: '租借或自備' },
+          { name: '雪褲', note: '租借或自備' },
+          { name: '雪鏡', note: '重要，租借品質參差不齊' },
+          { name: '滑雪手套', note: '防水款' },
+          { name: '頭套或面罩', note: '臉部保暖' },
+          { name: '滑雪專用厚襪', note: '一般襪子不夠厚' },
+          { name: '保暖內層', note: '發熱衣' },
+          { name: '防曬乳', note: '雪地紫外線很強' },
+          { name: '護唇膏', note: '乾燥容易脫皮' },
+          { name: '護具（護膝護臀）', note: '初學者建議帶' },
+        ]
+      },
+    ]
+  },
+  senior: {
+    label: '長輩同行 — 出發前確認',
+    info: '💡 北海道結冰路面對長輩危險，務必準備防滑鞋套，並安排輕鬆行程。',
+    sections: [
+      {
+        title: '📄 證件與醫療',
+        badge: '最重要',
+        items: [
+          { name: '護照', note: '有效期限確認' },
+          { name: '旅遊保險', note: '確認有老年人醫療保障', important: '長輩必買' },
+          { name: '常用藥物（足夠份量）', note: '日本買不到台灣的藥品', important: '提前備足' },
+          { name: '醫療文件或病歷摘要', note: '英文或日文版本更好' },
+          { name: '緊急聯絡人資訊', note: '存在手機和紙本各一份' },
+        ]
+      },
+      {
+        title: '🦶 防滑安全',
+        items: [
+          { name: '防滑雪靴', important: '結冰路面長輩最危險' },
+          { name: '防滑鞋套', note: '套在一般鞋子外面，北海道可以買' },
+          { name: '登山杖或手杖', note: '雪地行走輔助' },
+          { name: '發熱衣', note: '長輩更怕冷' },
+          { name: '保暖背心', note: '核心保暖最重要' },
+          { name: '手套', note: '' },
+          { name: '毛帽', note: '' },
+        ]
+      },
+    ]
+  },
+  summer: {
+    label: '夏秋旅遊 — 出發前確認',
+    info: '💡 北海道夏天早晚溫差大，即使 7 月也要帶薄外套。',
+    sections: [
+      {
+        title: '📄 證件',
+        badge: '最重要',
+        items: [
+          { name: '護照', note: '' },
+          { name: '台灣駕照正本', important: '租車必備' },
+          { name: '駕照日文譯本', important: '必備！不是國際駕照' },
+          { name: '旅遊保險', note: '' },
+          { name: 'eSIM 或 Wi-Fi 分享器', note: '' },
+        ]
+      },
+      {
+        title: '🌸 夏秋衣物',
+        items: [
+          { name: '薄外套（必備）', note: '傍晚氣溫下降快', important: '即使夏天也要帶' },
+          { name: '長袖上衣', note: '室內冷氣有時很強' },
+          { name: '輕便雨衣或折疊傘', note: '北海道午後偶有陣雨' },
+          { name: '防曬乳', note: '北海道夏天紫外線強' },
+          { name: '舒適步行鞋', note: '景點步行距離通常較長' },
+          { name: '防蚊液', note: '自然景點蚊蟲多' },
+        ]
+      },
+      {
+        title: '🌻 富良野・美瑛必備',
+        items: [
+          { name: '相機備用電池', note: '花田拍照量很大' },
+          { name: '記憶卡', note: '' },
+          { name: '輕便背包', note: '景點間步行用' },
+          { name: '現金', note: '', important: '農場周邊很多現金店' },
+        ]
+      },
+    ]
+  },
+  final: {
+    label: '出發當天 — 最後確認',
+    info: '✈️ 出發前 2 小時確認這份清單，不怕遺忘重要物品。',
+    sections: [
+      {
+        title: '🔴 絕對不能忘',
+        badge: '出門前確認',
+        items: [
+          { name: '護照', note: '', important: '放在最容易拿到的地方' },
+          { name: '錢包（信用卡＋現金）', note: '' },
+          { name: '手機', note: '' },
+          { name: '手機充電器', note: '' },
+          { name: '駕照正本＋日文譯本', important: '分開放，不要放同一個包' },
+          { name: '租車確認單', note: '' },
+        ]
+      },
+      {
+        title: '🟡 帶了會很好',
+        items: [
+          { name: '行動電源', note: '' },
+          { name: '耳機', note: '' },
+          { name: '常用藥品', note: '胃藥、感冒藥、止痛藥' },
+          { name: '小孩用品（如適用）', note: '' },
+          { name: '重要文件截圖', note: '存在手機離線相簿' },
+          { name: '住宿地址（日文）', note: '給計程車司機看' },
+        ]
+      },
+      {
+        title: '✅ 抵達北海道後',
+        items: [
+          { name: '租車車況拍照', note: '', important: '還車前的糾紛保障' },
+          { name: '確認雪刷位置', note: '請工作人員示範' },
+          { name: '設定離線導航', note: '山區沒有收訊' },
+          { name: '買飲用水和零食', note: '郊區補給不易' },
+          { name: '準備零錢', note: '停車場、自動販賣機用' },
+          { name: '查隔天天氣與路況', note: '使用道北旅遊天氣 App' },
+        ]
+      },
+    ]
+  },
+};
+
+let currentType = 'winter';
+let checkedItems = {};
+
+function selectType(type, el) {
+  currentType = type;
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderChecklist();
+}
+
+function renderChecklist() {
+  const data = CHECKLISTS[currentType];
+  const el = document.getElementById('checklist-content');
+  document.getElementById('progress-label').textContent = data.label;
+
+  let html = '';
+
+  if (data.info) {
+    html += `<div class="info-card">${data.info}</div>`;
+  }
+
+  data.sections.forEach((section, si) => {
+    html += `<div class="section-title">${section.title}`;
+    if (section.badge) html += `<span class="section-badge">${section.badge}</span>`;
+    html += `</div><div class="card">`;
+
+    section.items.forEach((item, ii) => {
+      const key = `${currentType}-${si}-${ii}`;
+      const isChecked = checkedItems[key];
+      html += `<div class="check-row ${isChecked ? 'checked' : ''}" onclick="toggleItem('${key}')">
+        <div class="check-box">${isChecked ? '✓' : ''}</div>
+        <div class="check-text">
+          <div class="check-name">${item.name}</div>
+          ${item.note ? `<div class="check-note">${item.note}</div>` : ''}
+          ${item.important ? `<div class="check-important">⚠️ ${item.important}</div>` : ''}
+        </div>
+      </div>`;
+    });
+
+    html += `</div>`;
+  });
+
+  el.innerHTML = html;
+  updateProgress();
+}
+
+function toggleItem(key) {
+  checkedItems[key] = !checkedItems[key];
+  const row = event.currentTarget;
+  row.classList.toggle('checked');
+  const box = row.querySelector('.check-box');
+  box.textContent = checkedItems[key] ? '✓' : '';
+  updateProgress();
+}
+
+function updateProgress() {
+  const data = CHECKLISTS[currentType];
+  let total = 0, checked = 0;
+  data.sections.forEach((section, si) => {
+    section.items.forEach((_, ii) => {
+      total++;
+      if (checkedItems[`${currentType}-${si}-${ii}`]) checked++;
+    });
+  });
+
+  document.getElementById('checked-count').textContent = checked;
+  document.getElementById('total-count').textContent = total;
+  document.getElementById('progress-fill').style.width = total > 0 ? `${(checked/total)*100}%` : '0%';
+
+  const banner = document.getElementById('complete-banner');
+  banner.classList.toggle('show', checked === total && total > 0);
+}
+
+function resetAll() {
+  if (!confirm('確定要重置所有勾選？')) return;
+  checkedItems = {};
+  renderChecklist();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderChecklist();
+});
+</script>
+</body>
+</html>
