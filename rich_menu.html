@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  width:2500px; height:843px;
+  background:#1A2F55;
+  font-family:'Noto Sans TC', sans-serif;
+  overflow:hidden;
+}
+.grid {
+  width:2500px; height:843px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  grid-template-rows:repeat(2,1fr);
+  gap:3px; padding:3px;
+}
+.cell {
+  background:#162848;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:16px; border-radius:8px;
+  position:relative;
+}
+.cell.active {
+  background:#1E3A6E;
+  border:6px solid #FF6B00;
+}
+.cell-icon { font-size:80px; line-height:1; }
+.cell-label {
+  font-size:36px; font-weight:900;
+  color:white; letter-spacing:0.04em;
+}
+.cell.inactive .cell-label { color:rgba(255,255,255,0.35); }
+.cell.inactive .cell-icon { opacity:0.4; }
+.badge {
+  position:absolute; top:18px; right:18px;
+  background:#FF6B00; color:white;
+  font-size:22px; font-weight:900;
+  padding:6px 20px; border-radius:20px;
+  letter-spacing:0.05em;
+}
+/* 分隔線 */
+.divider-v {
+  position:absolute;
+  left:50%; top:0; bottom:0;
+  width:3px; background:#1A2F55;
+}
+</style>
+</head>
+<body>
+<div class="grid">
+
+  <div class="cell active">
+    <div class="badge">使用中</div>
+    <div class="cell-icon">🌨️</div>
+    <div class="cell-label">今日天氣</div>
+  </div>
+
+  <div class="cell inactive">
+    <div class="cell-icon">👕</div>
+    <div class="cell-label">穿著指南</div>
+  </div>
+
+  <div class="cell inactive">
+    <div class="cell-icon">📅</div>
+    <div class="cell-label">16天預報</div>
+  </div>
+
+  <div class="cell inactive">
+    <div class="cell-icon">🚗</div>
+    <div class="cell-label">自駕法規</div>
+  </div>
+
+  <div class="cell inactive">
+    <div class="cell-icon">🤖</div>
+    <div class="cell-label">AI 行程救星</div>
+  </div>
+
+  <div class="cell inactive">
+    <div class="cell-icon">💬</div>
+    <div class="cell-label">問問題</div>
+  </div>
+
+</div>
+</body>
+</html>
