@@ -635,6 +635,15 @@ window.addEventListener('DOMContentLoaded', async () => {
   await loadCity('asahikawa');
   document.getElementById('loading').style.display = 'none';
   document.getElementById('content').style.display = 'block';
+
+  // 根據網址 hash 自動切換分頁
+  const hash = window.location.hash;
+  if (hash === '#outfit') {
+    switchMode('outfit', document.getElementById('mbtn-outfit'));
+  } else if (hash === '#forecast') {
+    switchMode('forecast', document.getElementById('mbtn-forecast'));
+  }
+  // #today 或無 hash 預設顯示今日天氣，不需要額外處理
 });
 </script>
 </body>
