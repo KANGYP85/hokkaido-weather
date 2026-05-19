@@ -66,17 +66,23 @@ body {
 .progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--green)); border-radius: 3px; transition: width 0.3s ease; }
 
 /* Section */
-.section-title {
-  font-size: 13px; font-weight: 600; color: var(--muted);
-  text-transform: uppercase; letter-spacing: 0.06em;
-  margin: 20px 16px 8px;
-  display: flex; align-items: center; gap: 8px;
-}
+/* section-title removed - now using section-header */
 .section-badge {
   font-size: 11px; font-weight: 600;
   background: rgba(26,122,204,0.1); color: var(--blue);
   padding: 2px 8px; border-radius: 10px;
 }
+
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 16px;
+  background: var(--card); border-radius: var(--radius);
+  margin: 10px 0 0; cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  transition: background 0.1s;
+}
+.section-header:active { background: var(--bg); }
+.section-body { margin-bottom: 2px; }
 
 /* Checklist */
 .card { background: var(--card); border-radius: var(--radius); margin: 0 16px; overflow: hidden; }
@@ -178,6 +184,10 @@ body {
     <button class="type-btn" onclick="selectType('final', this)">
       <div class="type-icon">✈️</div>
       <div><div class="type-name">出發當天</div><div class="type-sub">最後確認</div></div>
+    </button>
+    <button class="type-btn" onclick="selectType('rescue', this)" style="grid-column:span 2; border-color:rgba(255,59,48,0.3); background:rgba(255,59,48,0.04);">
+      <div class="type-icon">🆘</div>
+      <div><div class="type-name" style="color:var(--red);">到了北海道才發現少帶⋯</div><div class="type-sub">補救指南</div></div>
     </button>
   </div>
 </div>
@@ -429,6 +439,74 @@ const CHECKLISTS = {
       },
     ]
   },
+  rescue: {
+    label: '到了北海道，發現少帶⋯',
+    info: '💡 大部分東西都能在北海道補買，除了駕照日文譯本。',
+    sections: [
+      {
+        title: '🚨 駕照日文譯本',
+        badge: '無法補辦',
+        items: [
+          { name: '改搭 JR・巴士', note: '旭川站有路線可前往各景點' },
+          { name: '改搭計程車', note: '費用較高，道北鄉下計程車不多', important: '建議提前叫車' },
+          { name: '請同行有譯本的人代駕', note: '下次出發前記得在監理所申請，約 100 元台幣' },
+        ]
+      },
+      {
+        title: '👟 雪靴・防滑鞋・冰爪',
+        badge: '當地買最方便',
+        items: [
+          { name: 'AEON（旭川駅前）', note: '雪靴選擇最多，價格合理' },
+          { name: 'ABC Mart（市區）', note: '品牌款雪靴' },
+          { name: 'DCM 等 Home Center', note: '冰爪種類最齊全，日文：アイゼン・滑り止め' },
+          { name: '100 元店・藥妝店', note: '簡易防滑鞋套，套在一般鞋外應急' },
+        ]
+      },
+      {
+        title: '🧤 手套・毛帽・保暖衣',
+        items: [
+          { name: '7-11・全家（便利商店）', note: '手套、暖暖包應急用' },
+          { name: 'Uniqlo（旭川駅前）', note: '發熱衣、手套、毛帽品質好' },
+          { name: '藥妝店（ツルハ等）', note: '暖暖包大包裝最划算，北海道買比台灣便宜' },
+        ]
+      },
+      {
+        title: '💊 常用藥品',
+        items: [
+          { name: '感冒藥 → 風邪薬', note: 'ツルハドラッグ、マツモトキヨシ 在旭川市區都找得到' },
+          { name: '退燒藥 → 解熱剤', note: '' },
+          { name: '止痛藥 → 鎮痛剤', note: '' },
+          { name: '腸胃藥 → 胃腸薬', note: '' },
+          { name: '暈車藥 → 酔い止め', note: '' },
+        ]
+      },
+      {
+        title: '💴 現金不夠',
+        items: [
+          { name: '7-11 ATM（セブン銀行）', note: '支援台灣 Visa・Master，有中文介面' },
+          { name: '郵便局 ATM', note: '也支援國際卡' },
+          { name: '道北鄉下現金店多', note: '建議在旭川市區多提一些備用，手續費約 110-220 円' },
+        ]
+      },
+      {
+        title: '📱 網路・eSIM 沒弄好',
+        items: [
+          { name: '新千歲機場', note: '入境後有多家電信商 SIM 卡可買' },
+          { name: '旭川市區藥妝店・電器行', note: '也有售 SIM 卡' },
+          { name: '下載 Google Maps 離線地圖', note: '在旭川市區先下載，道北山區收訊差', important: '出發前一定要做' },
+        ]
+      },
+      {
+        title: '👶 小孩用品',
+        items: [
+          { name: 'AEON', note: '尿布、奶粉、嬰兒食品齊全' },
+          { name: '西松屋（旭川近郊）', note: '嬰幼兒專門店，品項最齊全' },
+          { name: '藥妝店', note: '嬰兒用品也找得到' },
+          { name: '請民宿協助代訂', note: '可寄到住宿地址' },
+        ]
+      },
+    ]
+  },
 };
 
 let currentType = 'winter';
@@ -453,14 +531,30 @@ function renderChecklist() {
   }
 
   data.sections.forEach((section, si) => {
-    html += `<div class="section-title">${section.title}`;
-    if (section.badge) html += `<span class="section-badge">${section.badge}</span>`;
-    html += `</div><div class="card">`;
+    const sectionId = `section-${currentType}-${si}`;
+    const checkedCount = section.items.filter((_, ii) => checkedItems[`${currentType}-${si}-${ii}`]).length;
+    const total = section.items.length;
+    const allDone = checkedCount === total;
+
+    html += `
+      <div class="section-header" onclick="toggleSection('${sectionId}')">
+        <div style="display:flex;align-items:center;gap:8px;flex:1;">
+          <span style="font-size:16px;">${section.title.split(' ')[0]}</span>
+          <span style="font-size:14px;font-weight:700;color:var(--text);">${section.title.split(' ').slice(1).join(' ')}</span>
+          ${section.badge ? `<span class="section-badge">${section.badge}</span>` : ''}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span style="font-size:12px;color:${allDone ? 'var(--green)' : 'var(--muted)'};">${checkedCount}/${total}</span>
+          <span class="section-arrow" id="arrow-${sectionId}" style="color:var(--muted);font-size:12px;">▼</span>
+        </div>
+      </div>
+      <div class="section-body" id="${sectionId}" style="display:none;">
+        <div class="card">`;
 
     section.items.forEach((item, ii) => {
       const key = `${currentType}-${si}-${ii}`;
       const isChecked = checkedItems[key];
-      html += `<div class="check-row ${isChecked ? 'checked' : ''}" onclick="toggleItem('${key}')">
+      html += `<div class="check-row ${isChecked ? 'checked' : ''}" onclick="toggleItem('${key}', '${sectionId}', this)">
         <div class="check-box">${isChecked ? '✓' : ''}</div>
         <div class="check-text">
           <div class="check-name">${item.name}</div>
@@ -470,20 +564,46 @@ function renderChecklist() {
       </div>`;
     });
 
-    html += `</div>`;
+    html += `</div></div>`;
   });
 
   el.innerHTML = html;
   updateProgress();
 }
 
-function toggleItem(key) {
+function toggleSection(id) {
+  const body = document.getElementById(id);
+  const arrow = document.getElementById(`arrow-${id}`);
+  const isOpen = body.style.display === 'block';
+  body.style.display = isOpen ? 'none' : 'block';
+  arrow.textContent = isOpen ? '▼' : '▲';
+}
+
+function toggleItem(key, sectionId, el) {
   checkedItems[key] = !checkedItems[key];
-  const row = event.currentTarget;
-  row.classList.toggle('checked');
-  const box = row.querySelector('.check-box');
+  el.classList.toggle('checked');
+  const box = el.querySelector('.check-box');
   box.textContent = checkedItems[key] ? '✓' : '';
   updateProgress();
+  refreshSectionCounter(sectionId);
+}
+
+function refreshSectionCounter(sectionId) {
+  // 找到對應 section-header 更新計數
+  const body = document.getElementById(sectionId);
+  if (!body) return;
+  const rows = body.querySelectorAll('.check-row');
+  const total = rows.length;
+  const checked = body.querySelectorAll('.check-row.checked').length;
+  const allDone = checked === total;
+  const header = body.previousElementSibling;
+  if (header) {
+    const counter = header.querySelector('span[style*="color"]');
+    if (counter) {
+      counter.textContent = `${checked}/${total}`;
+      counter.style.color = allDone ? 'var(--green)' : 'var(--muted)';
+    }
+  }
 }
 
 function updateProgress() {
@@ -514,5 +634,4 @@ window.addEventListener('DOMContentLoaded', () => {
   renderChecklist();
 });
 </script>
-</body>
-</html>
+</body></html>
