@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>北海道旅遊垃圾分類指南</title>
+<meta name="description" content="台灣旅客自駕北海道必備垃圾分類指南。各種垃圾怎麼分類一次查清楚。">
+<meta property="og:title" content="北海道旅遊垃圾分類指南">
+<meta property="og:description" content="台灣旅客自駕北海道必備垃圾分類指南">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F2F2F7;--card:#FFFFFF;--text:#1C1C1E;--text2:#3A3A3C;
+  --muted:#8E8E93;--border:rgba(0,0,0,0.08);
+  --blue:#1A7ACC;--radius:14px;
+}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Noto Sans TC',-apple-system,sans-serif;
+  min-height:100vh;max-width:430px;margin:0 auto;
+  padding-bottom:48px;-webkit-font-smoothing:antialiased;
+}
+.header{background:var(--blue);padding:52px 20px 20px;}
+.header h1{font-size:20px;font-weight:700;color:#fff;margin-bottom:2px;}
+.header p{font-size:13px;color:rgba(255,255,255,0.65);}
+
+.sec-label{
+  font-size:13px;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:0.06em;
+  margin:20px 16px 8px;
+}
+.card{background:var(--card);border-radius:var(--radius);margin:0 16px;overflow:hidden;}
+
+/* Place rows */
+.place-row{display:flex;gap:12px;align-items:flex-start;padding:13px 16px;border-bottom:0.5px solid var(--border);}
+.place-row:last-child{border-bottom:none;}
+.place-row i{font-size:18px;color:var(--blue);margin-top:1px;flex-shrink:0;}
+.place-name{font-size:15px;font-weight:600;color:var(--text);}
+.place-desc{font-size:13px;color:var(--muted);margin-top:2px;line-height:1.5;}
+.place-warn{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;color:#C04D00;background:rgba(255,107,0,0.1);
+  border-radius:6px;padding:2px 7px;margin-top:5px;
+}
+
+/* Category grid */
+.cat-wrap{margin:12px 16px 0;}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+.cat-btn{
+  background:var(--card);border-radius:12px;padding:12px 4px;
+  text-align:center;cursor:pointer;transition:all 0.15s;
+  border:1.5px solid transparent;
+}
+.cat-btn:active{opacity:0.8;}
+.cat-btn.active{background:#A8C46B;border-color:#A8C46B;}
+.cat-btn.special{background:#FFF0E6;border-color:#FFB89A;}
+.cat-btn.special.active{background:#A8C46B;border-color:#A8C46B;}
+.cat-em{font-size:24px;margin-bottom:5px;line-height:1;}
+.cat-name{font-size:10px;color:var(--muted);line-height:1.35;}
+.cat-btn.active .cat-name{color:#fff;}
+.cat-btn.special .cat-name{color:#C04D00;font-weight:600;}
+.cat-btn.special.active .cat-name{color:#fff;}
+
+/* Items */
+.items-wrap{margin:12px 16px 0;display:flex;flex-direction:column;gap:6px;}
+.item-card{background:var(--card);border-radius:var(--radius);overflow:hidden;cursor:pointer;}
+.item-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;}
+.item-left{display:flex;align-items:center;gap:10px;}
+.item-em{font-size:20px;width:28px;text-align:center;flex-shrink:0;}
+.item-name{font-size:15px;font-weight:500;color:var(--text);}
+.item-jp{font-size:11px;color:var(--muted);margin-top:1px;}
+.item-chev{font-size:16px;color:var(--muted);transition:transform 0.2s;flex-shrink:0;}
+.item-card.open .item-chev{transform:rotate(180deg);}
+.item-body{display:none;border-top:0.5px solid var(--border);padding:10px 16px;background:#FAFAFA;}
+.item-card.open .item-body{display:block;}
+.part-row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;padding:6px 0;border-bottom:0.5px solid var(--border);
+}
+.part-row:last-of-type{border-bottom:none;}
+.part-name{font-size:13px;color:var(--text2);}
+.part-jp{font-size:10px;color:var(--muted);margin-top:1px;}
+.badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap;flex-shrink:0;}
+.b-burn   {background:#FFF0E6;color:#C04D00;}
+.b-pla    {background:#E8F5EE;color:#1A7A4A;}
+.b-pet    {background:#E6F0FB;color:#1A5FA0;}
+.b-can    {background:#F2F2F2;color:#555;}
+.b-glass  {background:#E8F5F2;color:#0A6050;}
+.b-paper  {background:#FDF5E0;color:#8A5A00;}
+.b-nonburn{background:#EEF0F8;color:#3A4A90;}
+.b-battery{background:#FDE8EE;color:#A01840;}
+.b-hotel  {background:#F2F2F2;color:#555;}
+.b-sep    {background:#F2F2F2;color:#555;}
+.item-note{font-size:12px;color:var(--muted);line-height:1.5;padding-top:7px;margin-top:4px;border-top:0.5px solid var(--border);}
+.item-note.warn{color:#C04D00;}
+
+footer{text-align:center;padding:24px 20px;font-size:12px;color:var(--muted);line-height:1.9;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>北海道旅遊垃圾分類指南</h1>
+  <p>台灣旅客自駕適用</p>
+</div>
+
+<div class="sec-label">可丟垃圾的地點</div>
+<div class="card">
+  <div class="place-row">
+    <i class="ti ti-road"></i>
+    <div>
+      <div class="place-name">道の駅</div>
+      <div class="place-desc">自駕途中最方便的丟垃圾點，通常設有可燃・資源・瓶罐等分類垃圾桶。</div>
+    </div>
+  </div>
+  <div class="place-row">
+    <i class="ti ti-building"></i>
+    <div>
+      <div class="place-name">民宿・飯店</div>
+      <div class="place-desc">分類最完整，請依房東或飯店指示投入對應垃圾桶。</div>
+    </div>
+  </div>
+  <div class="place-row">
+    <i class="ti ti-building-store"></i>
+    <div>
+      <div class="place-name">便利商店</div>
+      <div class="place-desc">垃圾桶僅限投入該店購買的商品。</div>
+      <div class="place-warn"><i class="ti ti-alert-triangle"></i>外來垃圾請勿投入</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-label">垃圾品項查詢</div>
+<div class="cat-wrap">
+  <div class="cat-grid" id="cat-grid"></div>
+</div>
+
+<div class="items-wrap" id="items-wrap"></div>
+
+<footer>
+  資料僅供參考，各城市規則可能有差異<br>
+  © comma 旭川
+</footer>
+
+<script>
+const CATS = [
+  {id:'food',    em:'🍱', name:'食物\n飲料'},
+  {id:'shop',    em:'🛍️', name:'購物\n包裝'},
+  {id:'winter',  em:'❄️', name:'冬季\n戶外'},
+  {id:'hygiene', em:'🧴', name:'個人\n衛生'},
+  {id:'pharma',  em:'💊', name:'藥妝'},
+  {id:'paper',   em:'📄', name:'紙類\n雜項'},
+  {id:'hotel',   em:'🏨', name:'住宿\n相關'},
+  {id:'special', em:'⚠️', name:'特別\n處理', special:true},
+];
+
+const ITEMS = [
+  // 食物飲料
+  {cat:'food', name:'飯糰包裝', jp:'おにぎりの包装', emoji:'🍙',
+   parts:[{n:'外層塑膠膜',b:'pla',bl:'塑膠資源'},{n:'托盤',b:'pla',bl:'塑膠資源'},{n:'海苔紙',b:'burn',bl:'可燃垃圾'}]},
+  {cat:'food', name:'便當盒', jp:'コンビニ弁当', emoji:'🍱',
+   parts:[{n:'塑膠容器（清洗後）',b:'pla',bl:'塑膠資源'},{n:'醬料包',b:'pla',bl:'塑膠資源'},{n:'竹筷',b:'burn',bl:'可燃垃圾'}],
+   note:'容器洗不乾淨 → 可燃垃圾'},
+  {cat:'food', name:'杯麵', jp:'カップ麺', emoji:'🍜',
+   parts:[{n:'保麗龍杯（清洗後）',b:'pla',bl:'塑膠資源'},{n:'紙製杯',b:'burn',bl:'可燃垃圾'},{n:'調味粉包/油包',b:'pla',bl:'塑膠資源'}]},
+  {cat:'food', name:'寶特瓶', jp:'ペットボトル', emoji:'🥤',
+   parts:[{n:'瓶身（清洗後壓扁）',b:'pet',bl:'寶特瓶'},{n:'瓶蓋',b:'pla',bl:'塑膠資源'},{n:'標籤',b:'pla',bl:'塑膠資源'}]},
+  {cat:'food', name:'罐裝飲料', jp:'缶飲料', emoji:'🥫',
+   parts:[{n:'鋁罐/鋼罐（清洗後）',b:'can',bl:'空罐'}]},
+  {cat:'food', name:'外帶咖啡紙杯', jp:'使い捨て紙コップ', emoji:'☕',
+   parts:[{n:'紙杯本體',b:'burn',bl:'可燃垃圾'},{n:'塑膠蓋（清洗後）',b:'pla',bl:'塑膠資源'}],
+   note:'紙杯有塑膠內層，各城市均為可燃'},
+  {cat:'food', name:'吸管', jp:'ストロー', emoji:'🥤',
+   parts:[{n:'塑膠吸管',b:'pla',bl:'塑膠資源'},{n:'紙吸管',b:'burn',bl:'可燃垃圾'}]},
+  {cat:'food', name:'零食包裝袋', jp:'お菓子の袋', emoji:'🍬',
+   parts:[{n:'純塑膠袋',b:'pla',bl:'塑膠資源'},{n:'鋁箔複合材質',b:'burn',bl:'可燃垃圾'}],
+   note:'銀色反光包裝通常為鋁箔複合材質 → 可燃'},
+  {cat:'food', name:'口香糖/糖果包裝', jp:'ガム・キャンディの包み', emoji:'🍭',
+   parts:[{n:'鋁箔小包裝',b:'burn',bl:'可燃垃圾'},{n:'外層紙盒',b:'paper',bl:'紙類資源'}]},
+  {cat:'food', name:'竹串/牙籤', jp:'竹串・楊枝', emoji:'🥢',
+   parts:[{n:'木製',b:'burn',bl:'可燃垃圾'},{n:'塑膠叉',b:'pla',bl:'塑膠資源'}]},
+  {cat:'food', name:'螃蟹殼/海鮮廚餘', jp:'カニ殻・生ごみ', emoji:'🦀',
+   parts:[{n:'整體',b:'burn',bl:'可燃垃圾'}]},
+  {cat:'food', name:'清酒保溫袋', jp:'酒の保温袋', emoji:'🍶',
+   parts:[{n:'保溫袋本體（鋁箔複合材質）',b:'burn',bl:'可燃垃圾'},{n:'外層塑膠袋',b:'pla',bl:'塑膠資源'}]},
+
+  // 購物包裝
+  {cat:'shop', name:'塑膠購物袋', jp:'レジ袋', emoji:'🛍️',
+   parts:[{n:'塑膠袋',b:'pla',bl:'塑膠資源'}]},
+  {cat:'shop', name:'保麗龍箱', jp:'発泡スチロール箱', emoji:'📫',
+   parts:[{n:'保麗龍本體（清洗後）',b:'pla',bl:'塑膠資源'}]},
+  {cat:'shop', name:'乾燥包', jp:'乾燥剤', emoji:'🫙',
+   parts:[{n:'乾燥劑本體',b:'nonburn',bl:'不可燃'},{n:'紙包裝',b:'paper',bl:'紙類資源'},{n:'塑膠包裝',b:'pla',bl:'塑膠資源'}]},
+  {cat:'shop', name:'保冷劑', jp:'保冷剤', emoji:'🧊',
+   parts:[{n:'保冷劑本體（凝膠包）',b:'nonburn',bl:'不可燃'},{n:'外層塑膠包裝',b:'pla',bl:'塑膠資源'}]},
+
+  // 冬季戶外
+  {cat:'winter', name:'暖暖包', jp:'カイロ', emoji:'🔥',
+   parts:[{n:'本體（含鐵粉）',b:'nonburn',bl:'不可燃'},{n:'外包裝袋',b:'pla',bl:'塑膠資源'}]},
+
+  {cat:'winter', name:'滑雪蠟罐', jp:'スキーワックスの缶', emoji:'⛷️',
+   parts:[{n:'金屬罐（用完後）',b:'can',bl:'空罐'},{n:'塑膠包裝',b:'pla',bl:'塑膠資源'}]},
+
+  // 個人衛生
+  {cat:'hygiene', name:'化妝品容器', jp:'化粧品ボトル', emoji:'🧴',
+   parts:[{n:'塑膠容器（清洗後）',b:'pla',bl:'塑膠資源'},{n:'玻璃瓶（清洗後）',b:'glass',bl:'空瓶'},{n:'金屬容器',b:'nonburn',bl:'不可燃'}]},
+  {cat:'hygiene', name:'飯店備品容器', jp:'アメニティ容器', emoji:'🧼',
+   parts:[{n:'塑膠容器（清洗後）',b:'pla',bl:'塑膠資源'},{n:'玻璃瓶（清洗後）',b:'glass',bl:'空瓶'}],
+   note:'請依飯店指示分類'},
+  {cat:'hygiene', name:'口罩', jp:'使い捨てマスク', emoji:'😷',
+   parts:[{n:'整體',b:'burn',bl:'可燃垃圾'}]},
+  {cat:'hygiene', name:'拋棄式刮鬍刀', jp:'使い捨てカミソリ', emoji:'🪒',
+   parts:[{n:'整體（請用紙包好刀刃）',b:'nonburn',bl:'不可燃'}],
+   note:'⚠️ 刀刃物品，請用紙包好後丟棄', noteWarn:true},
+  {cat:'hygiene', name:'生理用品/紙尿褲', jp:'生理用品・紙おむつ', emoji:'🩹',
+   parts:[{n:'本體',b:'burn',bl:'可燃垃圾'},{n:'外包裝袋',b:'pla',bl:'塑膠資源'}]},
+  {cat:'hygiene', name:'拋棄式隱形眼鏡', jp:'使い捨てコンタクト', emoji:'👁️',
+   parts:[{n:'鏡片本體',b:'burn',bl:'可燃垃圾'},{n:'鋁箔蓋',b:'burn',bl:'可燃垃圾'},{n:'塑膠托盤',b:'pla',bl:'塑膠資源'}],
+   note:'鋁箔蓋不可當資源回收'},
+
+  // 藥妝
+  {cat:'pharma', name:'藥妝包裝', jp:'薬の包装', emoji:'💊',
+   parts:[{n:'紙盒',b:'paper',bl:'紙類資源'},{n:'鋁箔錠劑包（PTP）',b:'nonburn',bl:'不可燃'},{n:'說明書',b:'paper',bl:'紙類資源'}],
+   note:'藥品本體請帶回台灣或藥局回收'},
+  {cat:'pharma', name:'電池', jp:'乾電池・充電池', emoji:'🔋',
+   parts:[{n:'乾電池',b:'battery',bl:'有害垃圾（另外置放）'},{n:'充電電池',b:'battery',bl:'有害垃圾（另外置放）'}],
+   note:'⚠️ 絕不可丟一般垃圾，請另外置放', noteWarn:true},
+
+  // 紙類雜項
+  {cat:'paper', name:'收據（感熱紙）', jp:'レシート', emoji:'🧾',
+   parts:[{n:'整張',b:'burn',bl:'可燃垃圾'}],
+   note:'⚠️ 感熱紙不可當紙類回收', noteWarn:true},
+  {cat:'paper', name:'纜車票/票券', jp:'リフト券', emoji:'🎫',
+   parts:[{n:'整張',b:'burn',bl:'可燃垃圾'}],
+   note:'⚠️ 感熱紙不可當紙類回收', noteWarn:true},
+  {cat:'paper', name:'旅遊手冊/地圖', jp:'観光パンフレット', emoji:'📖',
+   parts:[{n:'普通紙冊',b:'paper',bl:'紙類資源'},{n:'塑膠封面',b:'pla',bl:'塑膠資源'}]},
+  {cat:'paper', name:'紙箱（段ボール）', jp:'段ボール', emoji:'📦',
+   parts:[{n:'紙箱（折疊後）',b:'paper',bl:'紙類資源'}],
+   note:'請折疊壓扁，部分飯店有專屬回收區'},
+
+  // 住宿相關
+  {cat:'hotel', name:'行李箱/大型物品', jp:'スーツケース', emoji:'🧳',
+   parts:[{n:'整體',b:'hotel',bl:'請飯店協助'}],
+   note:'⚠️ 旅客不可自行丟棄', noteWarn:true},
+  {cat:'hotel', name:'衣物/鞋子', jp:'衣類・靴', emoji:'👗',
+   parts:[{n:'整體',b:'sep',bl:'請另外置放'}],
+   note:'請另外置放讓人員處理，或尋找二手店'},
+  {cat:'hotel', name:'壞掉的傘', jp:'壊れた傘', emoji:'☂️',
+   parts:[{n:'整體',b:'hotel',bl:'請飯店協助'}],
+   note:'含金屬骨架，請飯店協助處理'},
+  {cat:'hotel', name:'充電線/插頭', jp:'充電ケーブル', emoji:'🔌',
+   parts:[{n:'整體',b:'nonburn',bl:'不可燃（請另外置放）'}]},
+
+  // 特別處理
+  {cat:'special', name:'暖暖包', jp:'カイロ（本體）', emoji:'🔥',
+   parts:[{n:'本體（含鐵粉）',b:'nonburn',bl:'不可燃'}],
+   note:'外包裝袋 → 塑膠資源'},
+  {cat:'special', name:'藥妝鋁箔錠劑包', jp:'PTPシート', emoji:'💊',
+   parts:[{n:'鋁箔錠劑包（PTP）',b:'nonburn',bl:'不可燃'}]},
+  {cat:'special', name:'化妝品金屬容器', jp:'化粧品の金属容器', emoji:'🧴',
+   parts:[{n:'金屬容器',b:'nonburn',bl:'不可燃'}]},
+  {cat:'special', name:'電池', jp:'乾電池・充電池', emoji:'🔋',
+   parts:[{n:'乾電池',b:'battery',bl:'有害垃圾（另外置放）'},{n:'充電電池',b:'battery',bl:'有害垃圾（另外置放）'}],
+   note:'⚠️ 絕不可丟一般垃圾，請另外置放', noteWarn:true},
+  {cat:'special', name:'衣物/鞋子', jp:'衣類・靴', emoji:'👗',
+   parts:[{n:'整體',b:'sep',bl:'請另外置放'}],
+   note:'請另外置放讓人員處理'},
+  {cat:'special', name:'拋棄式刮鬍刀', jp:'使い捨てカミソリ', emoji:'🪒',
+   parts:[{n:'整體（請用紙包好刀刃）',b:'nonburn',bl:'不可燃'}],
+   note:'⚠️ 刀刃物品，請用紙包好後丟棄', noteWarn:true},
+  {cat:'special', name:'壞掉的傘', jp:'壊れた傘', emoji:'☂️',
+   parts:[{n:'整體',b:'hotel',bl:'請飯店協助'}],
+   note:'含金屬骨架，請飯店協助處理'},
+  {cat:'special', name:'充電線/插頭', jp:'充電ケーブル', emoji:'🔌',
+   parts:[{n:'整體',b:'nonburn',bl:'不可燃（請另外置放）'}]},
+  {cat:'special', name:'乾燥包', jp:'乾燥剤（本體）', emoji:'🫙',
+   parts:[{n:'乾燥劑本體',b:'nonburn',bl:'不可燃'}]},
+  {cat:'special', name:'保冷劑', jp:'保冷剤（本體）', emoji:'🧊',
+   parts:[{n:'保冷劑本體（凝膠包）',b:'nonburn',bl:'不可燃'}]},
+  {cat:'special', name:'行李箱/大型物品', jp:'スーツケース', emoji:'🧳',
+   parts:[{n:'整體',b:'hotel',bl:'請飯店協助'}],
+   note:'⚠️ 旅客不可自行丟棄', noteWarn:true},
+];
+
+let currentCat = 'food';
+let openIdx = null;
+
+function renderCats() {
+  const grid = document.getElementById('cat-grid');
+  grid.innerHTML = CATS.map(c => `
+    <div class="cat-btn${c.special?' special':''}${c.id===currentCat?' active':''}" onclick="selectCat('${c.id}')">
+      <div class="cat-em">${c.em}</div>
+      <div class="cat-name">${c.name.replace('\n','<br>')}</div>
+    </div>`).join('');
+}
+
+function selectCat(id) {
+  currentCat = id;
+  openIdx = null;
+  renderCats();
+  renderItems();
+}
+
+function toggle(idx) {
+  openIdx = openIdx === idx ? null : idx;
+  renderItems();
+}
+
+function renderItems() {
+  const list = ITEMS.filter(item => item.cat === currentCat);
+  const wrap = document.getElementById('items-wrap');
+  wrap.innerHTML = list.map((item, i) => {
+    const isOpen = openIdx === i;
+    const parts = item.parts.map(p => `
+      <div class="part-row">
+        <div><div class="part-name">${p.n}</div></div>
+        <span class="badge b-${p.b}">${p.bl}</span>
+      </div>`).join('');
+    const note = item.note ? `<div class="item-note${item.noteWarn?' warn':''}">${item.note}</div>` : '';
+    return `
+      <div class="item-card${isOpen?' open':''}" onclick="toggle(${i})">
+        <div class="item-hd">
+          <div class="item-left">
+            <span class="item-em">${item.emoji}</span>
+            <div>
+              <div class="item-name">${item.name}</div>
+              <div class="item-jp">${item.jp}</div>
+            </div>
+          </div>
+          <i class="ti ti-chevron-down item-chev"></i>
+        </div>
+        <div class="item-body">${parts}${note}</div>
+      </div>`;
+  }).join('');
+}
+
+renderCats();
+renderItems();
+</script>
+</body>
+</html>
